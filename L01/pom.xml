@@ -31,6 +31,18 @@
             <artifactId>guava</artifactId>
             <version>26.0-jre</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/net.sf.proguard/proguard -->
+        <!--<dependency>-->
+        <!--<groupId>net.sf.proguard</groupId>-->
+        <!--<artifactId>proguard</artifactId>-->
+        <!--<version>4.4</version>-->
+        <!--</dependency>-->
+        <!-- https://mvnrepository.com/artifact/com.github.wvengen/proguard-maven-plugin -->
+        <!--<dependency>-->
+        <!--<groupId>com.github.wvengen</groupId>-->
+        <!--<artifactId>proguard-maven-plugin</artifactId>-->
+        <!--<version>2.0.14</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
@@ -38,6 +50,7 @@
 
         <plugins>
 
+            <!--GAUNT JAR-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -53,6 +66,7 @@
                 </configuration>
             </plugin>
 
+            <!--FAT JAR-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -76,6 +90,45 @@
                             <mainClass>${mainClassName}</mainClass>
                         </manifest>
                     </archive>
+                </configuration>
+            </plugin>
+
+            <!--OBFUSCATE JAR-->
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.0.14</version>
+                <dependencies>
+                    <!-- https://mvnrepository.com/artifact/net.sf.proguard/proguard-base -->
+                    <dependency>
+                        <groupId>net.sf.proguard</groupId>
+                        <artifactId>proguard-base</artifactId>
+                        <version>6.0.3</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>proguard</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <proguardVersion>6.0.3</proguardVersion>
+                    <obfuscate>true</obfuscate>
+                    <!--<injar>${project.build.finalName}-jar-with-dependencies.jar</injar>-->
+                    <injar>${project.build.finalName}.jar</injar>
+                    <outjar>${project.build.finalName}-small.jar</outjar>
+                    <options>
+                        <option>-keep public class ru.otus.sua.Main{public static void main(java.lang.String[]);}
+                        </option>
+                    </options>
+                    <libs>
+                        <!--<lib>${java.home}/lib/rt.jar</lib>-->
+                        <!--<lib>${java.home}/lib/jce.jar</lib>-->
+                        <lib>${java.home}/jmods/java.base.jmod</lib>
+                    </libs>
                 </configuration>
             </plugin>
 
