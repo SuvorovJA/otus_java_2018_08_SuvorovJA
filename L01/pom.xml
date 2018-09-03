@@ -117,12 +117,13 @@
                 <configuration>
                     <proguardVersion>6.0.3</proguardVersion>
                     <obfuscate>true</obfuscate>
-                    <!--<injar>${project.build.finalName}-jar-with-dependencies.jar</injar>-->
-                    <injar>${project.build.finalName}.jar</injar>
+                    <injar>${project.build.finalName}-jar-with-dependencies.jar</injar>
+                    <!--<injar>${project.build.finalName}.jar</injar>-->
                     <outjar>${project.build.finalName}-small.jar</outjar>
                     <options>
                         <option>-keep public class ru.otus.sua.Main{public static void main(java.lang.String[]);}
                         </option>
+                        <option>-dontwarn</option>
                     </options>
                     <libs>
                         <!--<lib>${java.home}/lib/rt.jar</lib>-->
