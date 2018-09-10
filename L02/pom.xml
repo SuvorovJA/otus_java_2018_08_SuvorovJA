@@ -5,8 +5,103 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.otus.sua</groupId>
-    <artifactId>L02</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>L02.1</artifactId>
+    <version>2018-08</version>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.10</maven.compiler.source>
+        <maven.compiler.target>1.10</maven.compiler.target>
+        <mainClassName>ru.otus.sua.L02.AgentTest</mainClassName>
+        <premainClassName>ru.otus.sua.L02.AgentForMem</premainClassName>
+        <agentClassFile>ru/otus/sua/L02/AgentForMem.class</agentClassFile>
+    </properties>
+
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-compiler-plugin</artifactId>-->
+            <!--<version>3.8.0</version>-->
+        <!--</dependency>-->
+    </dependencies>
+
+    <build>
+        <finalName>${project.name}</finalName>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <compilerArgs>
+                        <!--<arg>-verbose</arg>-->
+                        <!--<arg>-Xlint:unchecked</arg>-->
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+
+                    <execution>
+                        <id>agent-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <index>true</index>
+                                <!--<manifest>-->
+                                    <!--<addDefaultImplementationEntries>true</addDefaultImplementationEntries>-->
+                                    <!--<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>-->
+                                <!--</manifest>-->
+                                <manifestEntries>
+                                    <Premain-Class>${premainClassName}</Premain-Class>
+                                </manifestEntries>
+                            </archive>
+                            <includes>
+                                <include>${agentClassFile}</include>
+                            </includes>
+                            <classifier>AgentForMem</classifier>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <index>true</index>
+                                <manifest>
+                                    <addClasspath>true</addClasspath>
+                                    <mainClass>${mainClassName}</mainClass>
+                                </manifest>
+                            </archive>
+                            <excludes>
+                                <exclude>${agentClassFile}</exclude>
+                            </excludes>
+                            <classifier>AgentTest</classifier>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>
