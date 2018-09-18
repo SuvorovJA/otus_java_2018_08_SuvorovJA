@@ -232,12 +232,22 @@ public class MyArrayList<E> implements List<E> {
     @Override
     public boolean retainAll(Collection<?> c) {
         boolean ret = false;
-        for (Object o : myEl) {
-            if (!c.contains(o)) {
-                ret = true;
-                remove(o);
+        int i = 0;
+        do {
+            i = 0;
+            for (;i < mySize; i++) {
+                Object o = myEl[i];
+//                System.out.print(o.toString());
+                if (!c.contains(o)) {
+                    ret = true;
+                    remove(o);
+//                    System.out.print("r");
+                    break;
+                }
+//                System.out.print(" ");
             }
-        }
+//            System.out.println(" i="+i+" l="+mySize);
+        } while (i < mySize);
         return ret;
     }
 
