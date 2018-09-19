@@ -96,30 +96,39 @@ public class MyArrayList<E> implements List<E> {
     @Override
     public void add(int index, E e) {
         checkIndexForAdd(index);
-        // grow resizing check
+        growResizingCheck();
+        movingRight(index);
+        myEl[index] = e;
+        mySize++;
+    }
+
+    private void growResizingCheck() {
         if (mySize == myEl.length) {
             Object[] a = new Object[mySize + INIT_SIZE * 2]; // slow growing
             System.arraycopy(myEl, 0, a, 0, mySize);
             myEl = a;
         }
-        // moving right
+    }
+
+    private void movingRight(int index) {
         for (int i = mySize; i > index; i--) {
             myEl[i] = myEl[i - 1];
         }
-        myEl[index] = e;
-        mySize++;
     }
 
     @Override
     public E remove(int index) {
         checkIndex(index);
         E e = (E) myEl[index];
-        // moving left
+        movingLeft(index);
+        mySize--;
+        return e;
+    }
+
+    private void movingLeft(int index) {
         for (int i = index; i < mySize - 1; i++) {
             myEl[i] = myEl[i + 1];
         }
-        mySize--;
-        return e;
     }
 
     @Override
@@ -235,7 +244,7 @@ public class MyArrayList<E> implements List<E> {
         int i = 0;
         do {
             i = 0;
-            for (;i < mySize; i++) {
+            for (; i < mySize; i++) {
                 Object o = myEl[i];
 //                System.out.print(o.toString());
                 if (!c.contains(o)) {
