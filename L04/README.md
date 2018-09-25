@@ -10,7 +10,7 @@
 :ballot_box_with_check: Поддержать аннотации @Test, @Before, @After.
 
 Запускать вызовом статического метода с
-1. :black_square_button: именем класса с тестами,
+1. :ballot_box_with_check: именем класса с тестами,
 2. :black_square_button: именем package в котором надо найти и запустить тесты 
 
 
