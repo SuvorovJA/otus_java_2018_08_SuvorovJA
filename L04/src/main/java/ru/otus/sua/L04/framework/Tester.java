@@ -7,9 +7,9 @@ import ru.otus.sua.L04.framework.annotations.Before;
 import ru.otus.sua.L04.framework.annotations.Test;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,16 +19,27 @@ public class Tester {
     public static void doClass(Class<?> testableClass) {
         logger("Class: " + testableClass.getName());
 
-        List<Class<? extends Annotation>> atypes = List.of(Before.class, Test.class, After.class);
-        for (Class<? extends Annotation> a : atypes) {
-            if (!getAnnotatedMethods(testableClass, a).isEmpty()) {
-                logger("Methods: " + getAnnotatedMethods(testableClass, a).stream().map(Method::getName).collect(Collectors.joining(", ")));
-                executeMethods(testableClass, getAnnotatedMethods(testableClass, a));
+        List<Method> bms = getAnnotatedMethods(testableClass, Before.class);
+        logger("Methods @Before: " + bms.stream().map(Method::getName).collect(Collectors.joining(", ")));
+        List<Method> tms = getAnnotatedMethods(testableClass, Test.class);
+        logger("Methods @Test: " + tms.stream().map(Method::getName).collect(Collectors.joining(", ")));
+        List<Method> ams = getAnnotatedMethods(testableClass, After.class);
+        logger("Methods @After: " + ams.stream().map(Method::getName).collect(Collectors.joining(", ")));
+
+        List<Method> execpacket = new ArrayList<>();
+        for (Method m : tms) {
+            execpacket.clear();
+            execpacket.addAll(bms);
+            execpacket.add(m);
+            execpacket.addAll(ams);
+            if (execpacket.isEmpty()) {
+                logger("Nothing to execute in class.");
             } else {
-                logger("no @" + a.getSimpleName() + " methods");
+                executeMethods(testableClass, execpacket);
             }
         }
     }
+
 
     public static void doPackage(String testablePackage) throws IOException {
         logger(testablePackage);
@@ -44,17 +55,22 @@ public class Tester {
 
 
     private static void executeMethods(Class<?> testableClass, List<Method> loms) {
-        // TODO move object instantiation to uplevel, for minimize instantiations
+        Object o = getObject(testableClass);
+        if (o == null) return;
+        for (Method m : loms) {
+            executeMetod(o, m);
+        }
+    }
+
+    private static Object getObject(Class<?> testableClass) {
         Object o;
         try {
             o = getInstance(testableClass);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             logger("Skipping. Object Instantiation error. " + e.getMessage());
-            return;
+            return null;
         }
-        for (Method m : loms) {
-            executeMetod(o, m);
-        }
+        return o;
     }
 
     private static void executeMetod(Object o, Method m) {
