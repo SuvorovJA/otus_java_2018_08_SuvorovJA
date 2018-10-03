@@ -7,8 +7,10 @@ import java.lang.management.ManagementFactory;
 public class Main {
     private static Logger log = Logger.getLogger(Main.class.getName());
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         log.info("PID=" + ManagementFactory.getRuntimeMXBean().getName());
+
         EveryMinuteGcStat statLogger = new EveryMinuteGcStat();
+        SingleBigListWorker listWorker = new SingleBigListWorker();
     }
 }
