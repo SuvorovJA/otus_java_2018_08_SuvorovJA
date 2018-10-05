@@ -1,0 +1,36 @@
+23:48:39 main@EveryMinuteGcStat:33 - ParNew
+23:48:39 main@EveryMinuteGcStat:33 - ConcurrentMarkSweep
+23:48:48 pool-1-thread-1@EveryMinuteGcStat:76 -        1|     3729|        0|        0|        1|     3729|
+23:49:45 pool-1-thread-1@EveryMinuteGcStat:76 -        3|     1433|        2|     1744|        6|     6906|
+23:50:45 pool-1-thread-1@EveryMinuteGcStat:76 -        3|     1032|        4|     8403|       13|    16341|
+23:51:49 pool-1-thread-1@EveryMinuteGcStat:76 -        2|      505|        2|     8291|       17|    25137|
+23:52:45 pool-1-thread-1@EveryMinuteGcStat:76 -        0|        0|        0|        0|       17|    25137|
+23:53:45 pool-1-thread-1@EveryMinuteGcStat:76 -        1|       19|        0|        0|       18|    25156|
+23:54:45 pool-1-thread-1@EveryMinuteGcStat:76 -        1|       33|        0|        0|       19|    25189|
+23:54:45 main@EveryMinuteGcStat:33 - G1 Young Generation
+23:54:45 main@EveryMinuteGcStat:33 - G1 Old Generation
+23:54:52 pool-1-thread-1@EveryMinuteGcStat:76 -        3|      905|        0|        0|        3|      905|
+23:55:51 pool-1-thread-1@EveryMinuteGcStat:76 -        5|     1144|        0|        0|        8|     2049|
+23:56:51 pool-1-thread-1@EveryMinuteGcStat:76 -       10|     1138|        0|        0|       18|     3187|
+23:57:51 pool-1-thread-1@EveryMinuteGcStat:76 -       12|      915|        2|     3254|       32|     7356|
+23:58:51 pool-1-thread-1@EveryMinuteGcStat:76 -        4|     1495|        0|        0|       36|     8851|
+23:59:51 pool-1-thread-1@EveryMinuteGcStat:76 -        2|      699|        0|        0|       38|     9550|
+00:00:51 pool-1-thread-1@EveryMinuteGcStat:76 -        3|     1078|        0|        0|       41|    10628|
+00:00:52 main@EveryMinuteGcStat:33 - PS MarkSweep
+00:00:52 main@EveryMinuteGcStat:33 - PS Scavenge
+00:00:58 pool-1-thread-1@EveryMinuteGcStat:76 -        0|        0|        1|      575|        1|      575|
+00:01:58 pool-1-thread-1@EveryMinuteGcStat:76 -        0|        0|        3|     1558|        4|     2133|
+00:02:58 pool-1-thread-1@EveryMinuteGcStat:76 -        1|     2758|        0|        0|        5|     4891|
+00:03:59 pool-1-thread-1@EveryMinuteGcStat:76 -        3|    11322|        3|      327|       11|    16540|
+00:04:58 pool-1-thread-1@EveryMinuteGcStat:76 -        0|        0|        1|      191|       12|    16731|
+00:05:58 pool-1-thread-1@EveryMinuteGcStat:76 -        0|        0|        2|      386|       14|    17117|
+00:06:58 pool-1-thread-1@EveryMinuteGcStat:76 -        0|        0|        2|      423|       16|    17540|
+00:06:59 main@EveryMinuteGcStat:33 - Copy
+00:06:59 main@EveryMinuteGcStat:33 - MarkSweepCompact
+00:07:05 pool-1-thread-1@EveryMinuteGcStat:76 -        1|      668|        0|        0|        1|      668|
+00:08:05 pool-1-thread-1@EveryMinuteGcStat:76 -        3|     1259|        0|        0|        4|     1927|
+00:09:05 pool-1-thread-1@EveryMinuteGcStat:76 -        3|      885|        1|     2921|        8|     5733|
+00:10:05 pool-1-thread-1@EveryMinuteGcStat:76 -        2|       60|        3|    10725|       13|    16518|
+00:11:05 pool-1-thread-1@EveryMinuteGcStat:76 -        0|        0|        0|        0|       13|    16518|
+00:12:05 pool-1-thread-1@EveryMinuteGcStat:76 -        1|       19|        0|        0|       14|    16537|
+00:13:05 pool-1-thread-1@EveryMinuteGcStat:76 -        1|       32|        0|        0|       15|    16569|
