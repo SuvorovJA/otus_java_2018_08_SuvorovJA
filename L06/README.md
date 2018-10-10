@@ -6,5 +6,9 @@
 ДЗ-06: my cache engine
 
 - [ ] Напишите свой cache engine с soft references 
+  - [ ] SoftHashMap
+  - [ ] Cache interface
+  - [ ] Cache implementation
+  - [ ] Testing
 
 ##### Решение
