@@ -83,8 +83,17 @@ public class SoftHashMap<K, V> extends AbstractMap<K, V> {
         map.clear();
     }
 
+    public int size() {
+        return map.size();
+    }
+
     public Set<Entry<K, V>> entrySet() {
         throw new UnsupportedOperationException();
+    }
+
+    // that due to unimplemented entrySet for SoftHM
+    public K first() {
+        return map.keySet().iterator().next();
     }
 
     /**

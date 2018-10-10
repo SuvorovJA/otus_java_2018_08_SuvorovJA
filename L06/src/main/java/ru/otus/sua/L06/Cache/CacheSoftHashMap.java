@@ -43,7 +43,7 @@ public class CacheSoftHashMap<K, V> extends SoftHashMap<K, V> implements Cache<K
     @Override
     public V put(K key, V value) {
         if (super.size() == maxElements) {
-            K keyForRemove = super.keySet().iterator().next();
+            K keyForRemove = super.first();
             super.remove(keyForRemove);
             timerHolderCrutch.remove(keyForRemove);
         }
