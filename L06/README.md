@@ -8,7 +8,7 @@
 - [ ] Напишите свой cache engine с soft references 
   - [x] SoftHashMap
   - [x] Cache interface
-  - [ ] Cache implementation
+  - [x] Cache implementation
   - [ ] Testing
 
 ##### Решение

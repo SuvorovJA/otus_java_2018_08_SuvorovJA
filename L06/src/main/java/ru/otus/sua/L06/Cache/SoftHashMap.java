@@ -26,7 +26,7 @@ public class SoftHashMap<K, V> extends AbstractMap<K, V> {
     private ReferenceQueue<V> queue = new ReferenceQueue<V>();
 
     public SoftHashMap() {
-        // HM storage replaced by LHM storage, due to insertion order significant for size limit
+        // HM storage replaced by LHM storage, due to insertion order significant for size limit TODO ?
         // map = new HashMap<K, SoftValue<V>>();
         map = new LinkedHashMap<K, SoftValue<V>>();
     }
