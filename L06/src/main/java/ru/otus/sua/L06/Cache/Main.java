@@ -9,7 +9,7 @@ public class Main {
     private static Logger log = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws InterruptedException {
-        int size = 10;
+        int size = 100_000;
         log.info("All tests with cache size =" + size);
         {
             log.info("Test Eternal Cache");

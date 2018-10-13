@@ -95,3 +95,13 @@
 23:24:30 main@Main:56 - missing
 23:24:30 main@Main:48 - Hits=20 Miss=10
 ```
+
+```
+Experiment for processQueue(), в лог удаляемый ключ
+#21:47:04 main@Main:13 - All tests with cache size =100000
+$ java10 -Xmx59M -Xms59M -jar target/L06.jar |tee  log.txt | grep === 
+$ cat log.txt | grep === | wc -l
+69538 - ключей очищено в SoftHashMap после garbage collector
+```
+
+

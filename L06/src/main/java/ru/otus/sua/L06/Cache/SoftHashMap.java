@@ -7,6 +7,8 @@ package ru.otus.sua.L06.Cache;
  * Initial Developer: H2 Group
  */
 
+import org.apache.log4j.Logger;
+
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
@@ -22,6 +24,8 @@ import java.util.*;
  */
 public class SoftHashMap<K, V> extends AbstractMap<K, V> {
 
+
+    private static Logger log = Logger.getLogger(SoftHashMap.class.getName());
     private Map<K, SoftValue<V>> map;
     private ReferenceQueue<V> queue = new ReferenceQueue<V>();
 
@@ -41,6 +45,7 @@ public class SoftHashMap<K, V> extends AbstractMap<K, V> {
             SoftValue<V> k = (SoftValue<V>) o;
             Object key = k.key;
             map.remove(key);
+            log.info("=== " + key);
         }
     }
 
