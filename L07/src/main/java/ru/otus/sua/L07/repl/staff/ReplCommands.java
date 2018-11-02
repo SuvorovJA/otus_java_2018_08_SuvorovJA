@@ -10,6 +10,8 @@ public interface ReplCommands {
 
     String available();
 
+    String balance();
+
     String exit();
 
     String setValute(String valuteCode);

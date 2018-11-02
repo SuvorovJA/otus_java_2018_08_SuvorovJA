@@ -20,7 +20,6 @@ public class Repl implements  Runnable {
         this.commands = commands;
         nashorn.put("atm", commands);
         nashorn.put("help", commands.help());
-        nashorn.put("available", commands.available());
     }
 
     private String version() {

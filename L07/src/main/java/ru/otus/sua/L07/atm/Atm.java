@@ -1,32 +1,49 @@
 package ru.otus.sua.L07.atm;
 
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import ru.otus.sua.L07.atm.staff.*;
 
-@NoArgsConstructor
-public class Atm implements AtmMachine {
+import java.util.EnumMap;
+
+@AllArgsConstructor
+public class Atm implements AtmMachine, AtmAvailable {
+
+    private Cartridge cartridge;
+
     @Override
-    public long withdraw(Multivalute valute, long nonNegativeSum) throws ImpossibleWithdraw {
-        return 0;
+    public long withdraw(Multivalute valute, long nonNegativeSum) throws NegativeSum, ImpossibleWithdraw {
+        if (nonNegativeSum < 0) throw new NegativeSum();
+        // split sum to nominals by withdrawstrategy
+        return nonNegativeSum;
     }
 
     @Override
-    public long deposit(Multivalute valute, long nonNegativeSum) {
-        return 0;
+    public long deposit(Multivalute valute, EnumMap<Nominal, Long> packet) throws ImpossibleDeposit {
+        long sum = 0;
+        for (Nominal nominal : packet.keySet()) {
+            cartridge.charging(valute,nominal,packet.get(nominal));
+            sum += packet.get(nominal) * nominal.getNominal();
+        }
+        return sum;
     }
 
     @Override
     public long balanceTotal(Multivalute valute) {
-        return 0;
-    }
-
-    @Override
-    public void insertCartridge(AtmCartridge cartgidge) {
-
+        long sum = 0;
+        EnumMap<Nominal, Long> available = cartridge.available(valute);
+        for (Nominal n : available.keySet()) {
+            sum += available.get(n) * n.getNominal();
+        }
+        return sum;
     }
 
     @Override
     public void insertWithdrawStrategy(WithdrawStrategy strategy) {
 
+    }
+
+    @Override
+    public EnumMap<Nominal, Long> available(Multivalute valute) {
+        return cartridge.available(valute);
     }
 }

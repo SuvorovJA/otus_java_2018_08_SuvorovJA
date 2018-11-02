@@ -11,7 +11,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.10</maven.compiler.source>
         <maven.compiler.target>1.10</maven.compiler.target>
-        <mainClassName>ru.otus.sua.L07.atm.Main</mainClassName>
+        <mainClassName>ru.otus.sua.L07.Main</mainClassName>
     </properties>
     
     <dependencies>

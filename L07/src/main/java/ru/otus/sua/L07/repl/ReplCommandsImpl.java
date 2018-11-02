@@ -2,6 +2,8 @@ package ru.otus.sua.L07.repl;
 
 import lombok.AllArgsConstructor;
 import ru.otus.sua.L07.atm.staff.AtmMachine;
+import ru.otus.sua.L07.atm.staff.ImpossibleDeposit;
+import ru.otus.sua.L07.atm.staff.Multivalute;
 import ru.otus.sua.L07.atm.staff.Nominal;
 import ru.otus.sua.L07.repl.staff.ReplCommands;
 
@@ -20,25 +22,57 @@ public class ReplCommandsImpl implements ReplCommands {
                 " quit | atm.exit() - for exit;\n" +
                 " atm.put(\"N1000/3,N100/2, ...\") - put to ATM Nominal/Quantity pairs\n" +
                 " atm.get(1000) - get sum from ATM\n" +
-                " available | atm.available() - show how many Money in ATM\n" +
+                " atm.available() - show how many Money in ATM\n" +
+                " atm.balance() - show total sum of Money in ATM\n" +
                 " atm.setValute(\"RUR\") - change Valute for operations.";
     }
 
     @Override
     public String put(String args) {
-
-        EnumMap<Nominal, Long> pairs;
+        EnumMap<Nominal, Long> packet;
         try {
-            pairs = parse(args);
+            packet = parse(args);
         } catch (IllegalArgumentException e) {
             return "ERR: " + e.getMessage();
         }
-        return "ADDED: " + pairs.toString();
+        long sum;
+        try {
+            sum = machine.deposit(Multivalute.RUR, packet);
+        } catch (ImpossibleDeposit e) {
+            return "ERR: " + e.getMessage();
+        }
+        return "ADDED: " + packet.toString() + "= " + sum + Multivalute.RUR.toString();
+    }
+
+    @Override
+    public String get(long nonNegativeSum) {
+        return "NOT IMPLEMENTED";
+    }
+
+    @Override
+    public String available() {
+        return machine.available(Multivalute.RUR).toString();
+    }
+
+    @Override
+    public String balance() {
+        return ((Long) machine.balanceTotal(Multivalute.RUR)).toString();
+    }
+
+    @Override
+    public String exit() {
+        System.exit(0);
+        return "EXIT";
+    }
+
+    @Override
+    public String setValute(String valute) {
+        return "NOT IMPLEMENTED IN THAT ATM";
     }
 
     private EnumMap<Nominal, Long> parse(String args) throws IllegalArgumentException {
-        if (args == null | args.equals("")) throw new IllegalArgumentException("no param");
-        EnumMap<Nominal, Long> pairs = new EnumMap<Nominal, Long>(Nominal.class);
+        if (args == null || args.equals("")) throw new IllegalArgumentException("no param");
+        EnumMap<Nominal, Long> packet = new EnumMap<>(Nominal.class);
         String[] byCommaParts = args.split(",");
         if (byCommaParts.length == 0) throw new IllegalArgumentException("no pairs");
         for (String pairCandidate : byCommaParts) {
@@ -51,29 +85,9 @@ public class ReplCommandsImpl implements ReplCommands {
             } catch (NumberFormatException e) {
                 throw new IllegalArgumentException("incorrect quantity");
             }
-            pairs.put(nominal, quantity);
+            packet.put(nominal, quantity);
         }
-        return pairs;
+        return packet;
     }
 
-    @Override
-    public String get(long nonNegativeSum) {
-        return "NOT IMPLEMENTED";
-    }
-
-    @Override
-    public String available() {
-        return "AVAILABLE: ";
-    }
-
-    @Override
-    public String exit() {
-        System.exit(0);
-        return "EXIT";
-    }
-
-    @Override
-    public String setValute(String valute) {
-        return "NOT IMPLEMENTED";
-    }
 }

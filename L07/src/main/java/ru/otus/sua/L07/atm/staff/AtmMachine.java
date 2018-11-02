@@ -1,14 +1,14 @@
 package ru.otus.sua.L07.atm.staff;
 
-public interface AtmMachine {
+import java.util.EnumMap;
 
-    long withdraw(Multivalute valute, long nonNegativeSum) throws ImpossibleWithdraw;
+public interface AtmMachine extends AtmAvailable {
 
-    long deposit(Multivalute valute, long nonNegativeSum);
+    long withdraw(Multivalute valute, long nonNegativeSum) throws NegativeSum, ImpossibleWithdraw;
+
+    long deposit(Multivalute valute, EnumMap<Nominal, Long> packet) throws ImpossibleDeposit;
 
     long balanceTotal(Multivalute valute);
-
-    void insertCartridge(AtmCartridge cartgidge);
 
     void insertWithdrawStrategy(WithdrawStrategy strategy);
 
