@@ -4,7 +4,7 @@ public interface ReplCommands {
 
     String help();
 
-    String put(String... args);
+    String put(String args) throws IllegalArgumentException;
 
     String get(long nonNegativeSum);
 
