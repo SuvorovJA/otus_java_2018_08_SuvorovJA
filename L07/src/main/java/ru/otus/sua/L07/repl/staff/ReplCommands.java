@@ -1,8 +1,7 @@
-package ru.otus.sua.L07.repl;
-
-import ru.otus.sua.L07.atm.staff.Multivalute;
+package ru.otus.sua.L07.repl.staff;
 
 public interface ReplCommands {
+
     String help();
 
     String put(String... args);
@@ -11,8 +10,8 @@ public interface ReplCommands {
 
     String available();
 
-    void exit();
+    String exit();
 
-    String setValute(Multivalute valute);
+    String setValute(String valuteCode);
 
 }
