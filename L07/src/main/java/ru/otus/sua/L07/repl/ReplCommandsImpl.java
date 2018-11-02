@@ -1,10 +1,7 @@
 package ru.otus.sua.L07.repl;
 
 import lombok.AllArgsConstructor;
-import ru.otus.sua.L07.atm.staff.AtmMachine;
-import ru.otus.sua.L07.atm.staff.ImpossibleDeposit;
-import ru.otus.sua.L07.atm.staff.Multivalute;
-import ru.otus.sua.L07.atm.staff.Nominal;
+import ru.otus.sua.L07.atm.staff.*;
 import ru.otus.sua.L07.repl.staff.ReplCommands;
 
 import java.util.EnumMap;
@@ -46,7 +43,11 @@ public class ReplCommandsImpl implements ReplCommands {
 
     @Override
     public String get(long nonNegativeSum) {
-        return "NOT IMPLEMENTED";
+        try {
+            return "WITHDRAWED: " + machine.withdraw(Multivalute.RUR,nonNegativeSum).toString();
+        } catch (NegativeSum | ImpossibleWithdraw e) {
+            return "ERR: " + e.getMessage();
+        }
     }
 
     @Override

@@ -27,7 +27,7 @@ public class Cartridge implements AtmCartridge, AtmAvailable {
     public void discharging(Multivalute valute, Nominal nominal, long amount) throws ImpossibleDischarging {
         long oldAmount = 0;
         if (capacity.containsKey(nominal)) oldAmount = capacity.get(nominal);
-        if (oldAmount - amount < 0) throw new ImpossibleDischarging();
-        capacity.put(nominal, capacity.get(nominal) - amount);
+        if (oldAmount - amount < 0) throw new ImpossibleDischarging("Impossible Discharging");
+        capacity.put(nominal, oldAmount - amount);
     }
 }

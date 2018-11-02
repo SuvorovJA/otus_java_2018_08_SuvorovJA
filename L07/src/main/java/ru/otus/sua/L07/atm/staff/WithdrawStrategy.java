@@ -1,16 +1,18 @@
 package ru.otus.sua.L07.atm.staff;
 
+import ru.otus.sua.L07.atm.Cartridge;
+
 import java.util.EnumMap;
 
 public interface WithdrawStrategy {
 
     /**
      *
-     * @param available -  available nominals packet
+     * @param cartridge -  ATM cartridge
      * @param nonNegativeSum - amount for withdraw
      * @return - withdrawed nominals packet
      * @throws ImpossibleWithdraw - if impossible on given available packet
      */
-    EnumMap<Nominal, Long> tryWithdraw(EnumMap<Nominal, Long> available, long nonNegativeSum) throws ImpossibleWithdraw;
+    EnumMap<Nominal, Long> tryWithdraw(Cartridge cartridge, long nonNegativeSum) throws NegativeSum, ImpossibleWithdraw;
 
 }

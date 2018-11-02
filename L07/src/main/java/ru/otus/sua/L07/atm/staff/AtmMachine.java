@@ -4,12 +4,12 @@ import java.util.EnumMap;
 
 public interface AtmMachine extends AtmAvailable {
 
-    long withdraw(Multivalute valute, long nonNegativeSum) throws NegativeSum, ImpossibleWithdraw;
+    EnumMap<Nominal, Long> withdraw(Multivalute valute, long nonNegativeSum) throws NegativeSum, ImpossibleWithdraw;
 
     long deposit(Multivalute valute, EnumMap<Nominal, Long> packet) throws ImpossibleDeposit;
 
     long balanceTotal(Multivalute valute);
 
-    void insertWithdrawStrategy(WithdrawStrategy strategy);
+    void setWithdrawStrategy(WithdrawStrategy strategy);
 
 }

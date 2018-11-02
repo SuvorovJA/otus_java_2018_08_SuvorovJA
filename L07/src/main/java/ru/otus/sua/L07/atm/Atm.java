@@ -9,19 +9,19 @@ import java.util.EnumMap;
 public class Atm implements AtmMachine, AtmAvailable {
 
     private Cartridge cartridge;
+    private WithdrawStrategy strategy;
 
     @Override
-    public long withdraw(Multivalute valute, long nonNegativeSum) throws NegativeSum, ImpossibleWithdraw {
-        if (nonNegativeSum < 0) throw new NegativeSum();
-        // split sum to nominals by withdrawstrategy
-        return nonNegativeSum;
+    public EnumMap<Nominal, Long> withdraw(Multivalute valute, long nonNegativeSum) throws NegativeSum, ImpossibleWithdraw {
+        if (nonNegativeSum < 0) throw new NegativeSum("Negative Sum");
+        return strategy.tryWithdraw(cartridge, nonNegativeSum);
     }
 
     @Override
     public long deposit(Multivalute valute, EnumMap<Nominal, Long> packet) throws ImpossibleDeposit {
         long sum = 0;
         for (Nominal nominal : packet.keySet()) {
-            cartridge.charging(valute,nominal,packet.get(nominal));
+            cartridge.charging(valute, nominal, packet.get(nominal));
             sum += packet.get(nominal) * nominal.getNominal();
         }
         return sum;
@@ -38,8 +38,8 @@ public class Atm implements AtmMachine, AtmAvailable {
     }
 
     @Override
-    public void insertWithdrawStrategy(WithdrawStrategy strategy) {
-
+    public void setWithdrawStrategy(WithdrawStrategy strategy) {
+        this.strategy = strategy;
     }
 
     @Override
