@@ -1,7 +1,8 @@
 package ru.otus.sua.L08.repl;
 
 import lombok.AllArgsConstructor;
-import ru.otus.sua.L08.depAtm.staff.Departament;
+import ru.otus.sua.L08.atm.staff.Event;
+import ru.otus.sua.L08.depAtm.AtmDepartament;
 import ru.otus.sua.L08.repl.staff.DepCommands;
 
 import java.util.AbstractMap;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class DepCommandsImpl implements DepCommands {
 
-    Departament departament;
+    AtmDepartament departament;
 
     @Override
     public String list() {
@@ -34,7 +35,19 @@ public class DepCommandsImpl implements DepCommands {
     }
 
     @Override
-    public String help() {
-        return "this dept help";
+    public String notify(String event) {
+        if(event.equals("RESET")) {
+            departament.notify(Event.RESET);
+            return "OK";
+        } else {
+            return "UNKNOWN EVENT";
+        }
     }
+
+    @Override
+    public String help() {
+        return "this will dept help";
+    }
+
+
 }

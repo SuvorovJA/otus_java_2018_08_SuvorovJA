@@ -12,4 +12,6 @@ public interface DepCommands extends ReplCommands {
 
     String balance();
 
+    String notify(String event);
+
 }

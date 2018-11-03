@@ -14,9 +14,9 @@ public class ReplCommandsImpl implements ReplCommands {
                 " dep.balance() - sum of money in ATMs\n" +
                 " dep.available() - list of cartridges contents on ATMs\n" +
                 " dep.list()  - list ATMs\n" +
+                " dep.notify(\"RESET\") - send event to all ATMs\n" +
                 " atmN.help() - help for N\'th ATM\n" +
                 " quit | dep.exit() - for exit;\n";
-
     }
 
 }

@@ -60,7 +60,7 @@ public class Cartridge implements AtmCartridge, AtmAvailable {
         Nominal minimalAvailableNominal = null;
         Nominal[] nominals = Nominal.values();
         for (int i = nominals.length - 1; i >= 0; i--) {
-            if (capacity.get(nominals[i]) <= 0) continue;
+            if (capacity.get(nominals[i]) == null || capacity.get(nominals[i]) <= 0) continue;
             minimalAvailableNominal = nominals[i];
             break;
         }
