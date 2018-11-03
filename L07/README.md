@@ -18,6 +18,72 @@
 
 ##### Решение
 
+new strategy on Cartridges
+``` 
+cant discharge. (should happen)
+Initial Cartridge capacity: {N5000=10, N1000=100, N500=91, N200=1, N100=100, N50=111, N10=1101}
+---------------------------------------------------------------------
+Oracle Nashorn 10.0.2
+ECMAScript ECMA - 262 Edition 5.1
+
+ATM SIMULATOR INTERFACE
+Commands:
+ help | atm.help() - this help
+ quit | atm.exit() - for exit;
+ atm.put("N1000/3,N100/2, ...") - put to ATM Nominal/Quantity pairs
+ atm.get(1000) - get sum from ATM
+ atm.available() - show how many Money in ATM
+ atm.balance() - show total sum of Money in ATM
+ atm.setValute("RUR") - change Valute for operations.
+> atm.available()
+{N5000=10, N1000=100, N500=91, N200=1, N100=100, N50=111, N10=1101}
+> atm.balance()
+222260
+> atm.get(1000)
+WITHDRAWED: {N1000=1}
+> atm.get(10000)
+WITHDRAWED: {N5000=2}
+> atm.get(10001)
+ERR: Impossible Withdraw. Not a round number or small sum.
+> atm.get(100000)
+WITHDRAWED: {N5000=8, N1000=60}
+> atm.get(1000000)
+ERR: Impossible Withdraw. SumForWithdraw > Cartridge capacity.
+> atm.balance()
+111260
+> atm.get(100000)
+WITHDRAWED: {N1000=39, N500=91, N200=1, N100=100, N50=106}
+> atm.balance()
+11260
+> atm.available()
+{N5000=0, N1000=0, N500=0, N200=0, N100=0, N50=5, N10=1101}
+> atm.put("N2000/3,N100/3")
+ADDED: {N2000=3, N100=3}= 6300RUR
+> atm.balance()
+17560
+> atm.available()
+{N5000=0, N2000=3, N1000=0, N500=0, N200=0, N100=3, N50=5, N10=1101}
+> atm.get(17560)
+WITHDRAWED: {N2000=3, N100=3, N50=5, N10=1101}
+> atm.get(10)
+ERR: Impossible Withdraw. SumForWithdraw > Cartridge capacity.
+> atm.balance()
+0
+> atm.available()
+{N5000=0, N2000=0, N1000=0, N500=0, N200=0, N100=0, N50=0, N10=0}
+> atm.put("N200/1,N10/3")
+ADDED: {N200=1, N10=3}= 230RUR
+> atm.available()
+{N5000=0, N2000=0, N1000=0, N500=0, N200=1, N100=0, N50=0, N10=3}
+>  atm.balance()
+230
+> atm.get(230)
+WITHDRAWED: {N200=1, N10=3}
+> 
+```
+
+
+old strategy on EnumSet
 ``` 
 cant discharge. (should happen)
 Initial Cartridge capacity: {N5000=10, N1000=100, N500=91, N200=1, N100=100, N50=111, N10=1101}

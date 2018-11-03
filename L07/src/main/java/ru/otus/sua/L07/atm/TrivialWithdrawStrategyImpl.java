@@ -10,68 +10,56 @@ public class TrivialWithdrawStrategyImpl implements WithdrawStrategy {
     @Override
     public EnumMap<Nominal, Long> tryWithdraw(Cartridge cartridge, long nonNegativeSumForWithdraw) throws NegativeSum, ImpossibleWithdraw {
 
-        EnumMap<Nominal, Long> packetOut = new EnumMap<>(Nominal.class);
-        EnumMap<Nominal, Long> packetIn = new EnumMap<>(Nominal.class);
-        packetIn.putAll(cartridge.available(Multivalute.RUR));
+        Cartridge packetOut = new Cartridge();
+        Cartridge packetIn = new Cartridge();
+        packetIn.chargingByCartridge(cartridge);
 
         if (nonNegativeSumForWithdraw < 0) throw new NegativeSum("Negative Sum");
+
         if (summarize(cartridge.available(Multivalute.RUR)) < nonNegativeSumForWithdraw)
-            throw new ImpossibleWithdraw("Impossible Withdraw. Big sum.");
+            throw new ImpossibleWithdraw("Impossible Withdraw. SumForWithdraw > Cartridge capacity.");
 
+        if (packetIn.getMinimalAvailableNominal() == null)
+            throw new ImpossibleWithdraw("Impossible Withdraw. Empty cartridge.");
 
-
-        long minimalAvailableNominal = 0;
-        Nominal[] nominals = Nominal.values();
-        for (int i = nominals.length - 1; i >= 0 ; i--) {
-            if (packetIn.get(nominals[i]) <= 0) continue;
-            minimalAvailableNominal = nominals[i].getNominal();
-            break;
-        }
-        if (minimalAvailableNominal == 0) throw new ImpossibleWithdraw("Impossible Withdraw. Empty cartridge.");
-
+        long minimalAvailableNominalBanknote = packetIn.getMinimalAvailableNominal().getNominal();
+        if (minimalAvailableNominalBanknote == 0)
+            throw new ImpossibleWithdraw("Impossible Withdraw. SumForWithdraw < Minimal available banknote.");
 
         long left = nonNegativeSumForWithdraw;
         while (left > 0) {
 
-            for (Nominal nominal : packetIn.keySet()) {
-                if (left < minimalAvailableNominal) throw new ImpossibleWithdraw("Impossible Withdraw. Not a round number or small sum.");
+            for (Nominal nominal : packetIn.available(Multivalute.RUR).keySet()) {
+
+                if (left < minimalAvailableNominalBanknote)
+                    throw new ImpossibleWithdraw("Impossible Withdraw. Not a round number or small sum.");
+
                 if (left < nominal.getNominal()) continue;
-                if (packetIn.get(nominal) == null || packetIn.get(nominal) <= 0) continue;
+                if (packetIn.available(Multivalute.RUR).get(nominal) == null) continue;
+                if (packetIn.available(Multivalute.RUR).get(nominal) <= 0) continue;
+
                 left -= nominal.getNominal();
-                discharging(packetIn, nominal, 1);
-                charging(packetOut, nominal, 1);
+
+                try {
+                    packetIn.discharging(Multivalute.RUR, nominal, 1);
+                    packetOut.charging(Multivalute.RUR, nominal, 1);
+                } catch (ImpossibleDischarging e) {
+                    throw new ImpossibleWithdraw("Err when discharge subcartridge. Atm broken state. (" + e.getMessage() + ")");
+                }
                 break;
             }
-
         }
 
-        if (left < 0 || summarize(packetOut) != nonNegativeSumForWithdraw)
+        if (left < 0 || summarize(packetOut.available(Multivalute.RUR)) != nonNegativeSumForWithdraw)
             throw new ImpossibleWithdraw("Impossible Withdraw. Err in algorithm.");
 
-        // apply packetOut to available (discharge main cartridge)
-        for (Nominal nominal : packetOut.keySet()) {
-            try {
-                cartridge.discharging(Multivalute.RUR, nominal, packetOut.get(nominal));
-            } catch (ImpossibleDischarging e) {
-                throw new ImpossibleWithdraw("Err when discharge cartridge. Atm broken state.");
-            }
+        try {
+            cartridge.dischargingByCartridge(packetOut);
+        } catch (ImpossibleDischarging e) {
+            throw new ImpossibleWithdraw("Err when discharge main cartridge. Atm broken state.(" + e.getMessage() + ")");
         }
 
-        return packetOut;
-    }
-
-
-    private void charging(EnumMap<Nominal, Long> packet, Nominal nominal, long amount) {
-        long oldAmount = 0;
-        if (packet.containsKey(nominal)) oldAmount = packet.get(nominal);
-        packet.put(nominal, oldAmount + amount);
-    }
-
-    private void discharging(EnumMap<Nominal, Long> packet, Nominal nominal, long amount) {
-        long oldAmount = 0;
-        if (packet.containsKey(nominal)) oldAmount = packet.get(nominal);
-        if (oldAmount - amount < 0) return;
-        packet.put(nominal, oldAmount - amount);
+        return packetOut.available(Multivalute.RUR);
     }
 
     private long summarize(EnumMap<Nominal, Long> packet) {
