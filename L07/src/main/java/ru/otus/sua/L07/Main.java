@@ -8,6 +8,7 @@ import ru.otus.sua.L07.atm.staff.Multivalute;
 import ru.otus.sua.L07.atm.staff.Nominal;
 import ru.otus.sua.L07.atm.staff.WithdrawStrategy;
 import ru.otus.sua.L07.repl.Repl;
+import ru.otus.sua.L07.repl.AtmCommandsImpl;
 import ru.otus.sua.L07.repl.ReplCommandsImpl;
 
 public class Main {
@@ -42,7 +43,9 @@ public class Main {
         WithdrawStrategy strategy = new TrivialWithdrawStrategyImpl();
 
         System.out.println("---------------------------------------------------------------------");
-        Repl repl = new Repl(new ReplCommandsImpl(new Atm(cartridge,strategy)));
+        Repl repl = new Repl();
+        repl.addCommands("atm", new AtmCommandsImpl(new Atm(cartridge,strategy)));
+        repl.addCommands("help", new ReplCommandsImpl());
         repl.run();
 
     }

@@ -4,16 +4,4 @@ public interface ReplCommands {
 
     String help();
 
-    String put(String args) throws IllegalArgumentException;
-
-    String get(long nonNegativeSum);
-
-    String available();
-
-    String balance();
-
-    String exit();
-
-    String setValute(String valuteCode);
-
 }

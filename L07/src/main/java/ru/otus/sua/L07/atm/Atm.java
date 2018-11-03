@@ -1,11 +1,13 @@
 package ru.otus.sua.L07.atm;
 
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 import ru.otus.sua.L07.atm.staff.*;
 
 import java.util.EnumMap;
 
 @AllArgsConstructor
+@Setter
 public class Atm implements AtmMachine, AtmAvailable {
 
     private Cartridge cartridge;

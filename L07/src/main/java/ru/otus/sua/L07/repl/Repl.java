@@ -5,34 +5,37 @@ import ru.otus.sua.L07.repl.staff.ReplCommands;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class Repl implements  Runnable {
+public class Repl implements Runnable {
 
     private ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
-    private ReplCommands commands;
 
-    public Repl(ReplCommands commands) {
-        this.commands = commands;
-        nashorn.put("atm", commands);
-        nashorn.put("help", commands.help());
+    private Map<String, ReplCommands> commandsMap = new HashMap<>();
+
+    public void addCommands(String name, ReplCommands commands) {
+        this.commandsMap.put(name, commands);
     }
 
     private String version() {
         return (nashorn.getFactory().getEngineName() + " " +
                 nashorn.getFactory().getEngineVersion() + "\n" +
                 nashorn.getFactory().getLanguageName() + " " +
-                nashorn.getFactory().getLanguageVersion()+ "\n\n" +
-                commands.help()
+                nashorn.getFactory().getLanguageVersion() + "\n\n" +
+                (commandsMap.containsKey("help") ? commandsMap.get("help").help() : "\n")
         );
     }
 
     @Override
     public void run() {
+
+        ReplConfigApply();
 
         System.out.println(version());
 
@@ -55,6 +58,12 @@ public class Repl implements  Runnable {
             };
             Predicate<String> quitCommand = (command) -> quit.equalsIgnoreCase(command.trim());
             Stream.generate(input).map(expressionHandler).noneMatch(quitCommand);
+        }
+    }
+
+    private void ReplConfigApply() {
+        for (String key : commandsMap.keySet()) {
+            nashorn.put(key, key.contains("help") ? commandsMap.get(key).help() : commandsMap.get(key));
         }
     }
 
