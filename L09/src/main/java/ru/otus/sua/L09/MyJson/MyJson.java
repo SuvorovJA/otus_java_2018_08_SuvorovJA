@@ -33,7 +33,6 @@ public class MyJson {
         return jsonArray.toString();
     }
 
-
     public String toJson(Object subject) {
         if (subject == null) return "null";
 
@@ -51,34 +50,13 @@ public class MyJson {
                 add(jsonObject, f.getName(), this.toJson((String) f.getValue()));
             } else if (f.isArray()) {
                 add(jsonObject, f.getName(), this.toJson(f.getValueAsArray()));
-            } else if (f.isChar()) { // fix "cha":S issue
+            } else if (f.isChar()) { // fix "cha":S issue in f.isPrimitive()
                 add(jsonObject, f.getName(), this.toJson((Character) f.getValue()));
             } else if (f.isPrimitive()) {
                 add(jsonObject, f.getName(), f.getValue());
             } else if (f.isCollection()) {
                 JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder((Collection<?>) f.getValue());
                 add(jsonObject, f.getName(), jsonArrayBuilder.build().toString());
-
-                // no work as desired
-//            } else if (f.isPrimitive()) {
-//                add(jsonObject, f.getName(), f.getTypedValue(f.getType()));
-
-                // this block covered by f.isPrimitive() // TODO for remove all
-//            } else if (f.isBool()) {
-//                add(jsonObject, f.getName(), (boolean) f.getValue());
-//            } else if (f.isByte()) {
-//                add(jsonObject, f.getName(), (byte) f.getValue());
-//            } else if (f.isShort()) {
-//                add(jsonObject, f.getName(), (short) f.getValue());
-//            } else if (f.isInt()) {
-//                add(jsonObject, f.getName(), (int) f.getValue());
-//            } else if (f.isLong()) {
-//                add(jsonObject, f.getName(), (long) f.getValue());
-//            } else if (f.isFloat()) {
-//                add(jsonObject, f.getName(), (float) f.getValue());
-//            } else if (f.isDouble()) {
-//                add(jsonObject, f.getName(), (double) f.getValue());
-
             } else {
                 add(jsonObject, f.getName(), this.toJson(f.getValue()));
             }
@@ -88,7 +66,6 @@ public class MyJson {
         jsonObject.append("}");
         return jsonObject.toString();
     }
-
 
     private <T> StringBuilder add(StringBuilder json, String name, T value) {
         return json.append("\"").append(name).append("\"").append(":").append(value);

@@ -16,19 +16,4 @@ public class SimpleObjects {
         this.boxedCha = (Character) cha;
     }
 
-    public int getNonjson() {
-        return nonjson;
-    }
-
-    public void setNonjson(int nonjson) {
-        this.nonjson = nonjson;
-    }
-
-    public boolean isBoo() {
-        return boo;
-    }
-
-    public void setBoo(boolean boo) {
-        this.boo = boo;
-    }
 }

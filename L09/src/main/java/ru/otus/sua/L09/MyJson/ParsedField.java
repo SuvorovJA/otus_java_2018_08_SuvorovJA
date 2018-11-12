@@ -27,44 +27,12 @@ class ParsedField {
         isWrapper = subject instanceof Number || subject instanceof Character;
     }
 
-    <T extends Number> T getTypedValue(Class<T> t) {
-        return (T) value;
-    }
-
     boolean isString() {
         return (type.equals(String.class));
     }
 
     boolean isPrimitive() {
         return (type.isPrimitive());
-    }
-
-    boolean isInt() {
-        return (Integer.class.equals(type) || int.class.equals(type));
-    }
-
-    boolean isLong() {
-        return (Long.class.equals(type) || long.class.equals(type));
-    }
-
-    boolean isShort() {
-        return (Short.class.equals(type) || short.class.equals(type));
-    }
-
-    boolean isByte() {
-        return (Byte.class.equals(type) || byte.class.equals(type));
-    }
-
-    boolean isFloat() {
-        return (Float.class.equals(type) || float.class.equals(type));
-    }
-
-    boolean isDouble() {
-        return (Double.class.equals(type) || double.class.equals(type));
-    }
-
-    boolean isBool() {
-        return (Boolean.class.equals(type) || boolean.class.equals(type));
     }
 
     boolean isChar() {
@@ -85,10 +53,6 @@ class ParsedField {
 
     String getName() {
         return name;
-    }
-
-    Class<?> getType() {
-        return type;
     }
 
     Object getValue() {
@@ -119,6 +83,5 @@ class ParsedField {
         boolean isStatic = Modifier.isStatic(modifiers);
         return isTransient || isStatic;
     }
-
 
 }
