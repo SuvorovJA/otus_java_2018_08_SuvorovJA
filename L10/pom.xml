@@ -36,7 +36,6 @@
             <version>1.7.25</version>
         </dependency>
 
-
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -44,15 +43,6 @@
             <version>1.18.2</version>
             <scope>provided</scope>
         </dependency>
-
-
-        <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core -->
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>5.1.4</version>
-        </dependency>
-
 
         <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
         <dependency>
@@ -62,7 +52,6 @@
             <!-- <scope>test</scope> -->
         </dependency>
 
-
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
             <groupId>junit</groupId>
@@ -70,15 +59,6 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-
-
-        <!-- https://mvnrepository.com/artifact/javax.naming/jndi -->
-        <dependency>
-            <groupId>javax.naming</groupId>
-            <artifactId>jndi</artifactId>
-            <version>1.2.1</version>
-        </dependency>
-
 
     </dependencies>
 

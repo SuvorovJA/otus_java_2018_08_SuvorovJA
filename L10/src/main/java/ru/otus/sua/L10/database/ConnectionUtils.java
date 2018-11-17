@@ -10,9 +10,9 @@ public class ConnectionUtils {
 
     private static Logger log = LoggerFactory.getLogger(ConnectionUtils.class);
 
-    public static Connection getConnection() throws SQLException, ClassNotFoundException {
-        Connection connection = DatasourceUtils.getConnection();
-        log.info(getMetadata(connection));
+    public static Connection getConnection() throws SQLException {
+        Connection connection = LocalDatasource.getConnection();
+        // Connection connection = ExternalDatasource.getConnection();
         return connection;
     }
 
@@ -32,16 +32,5 @@ public class ConnectionUtils {
         }
     }
 
-    private static String getMetadata(Connection connection) {
-        try {
-            return "\n" +
-                    "\tConnected to:\t" + connection.getMetaData().getURL() + "\n" +
-                    "\tDB name:\t" + connection.getMetaData().getDatabaseProductName() + "\n" +
-                    "\tDB version:\t" + connection.getMetaData().getDatabaseProductVersion() + "\n" +
-                    "\tDriver:\t" + connection.getMetaData().getDriverName();
-        } catch (SQLException e) {
-            log.error(e.getSQLState());
-            return "";
-        }
-    }
+
 }
