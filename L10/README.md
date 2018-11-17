@@ -54,5 +54,12 @@
 02:16:19.961 [main] INFO ru.otus.sua.L10.executor.Executor - query: SELECT NAME FROM UserDataSet WHERE ID=3
 02:16:19.962 [main] INFO ru.otus.sua.L10.executor.DAOTest - Test Three
 02:16:19.962 [main] INFO ru.otus.sua.L10.executor.Executor - query: SELECT NAME FROM UserDataSet WHERE ID=3
+
+
+Test ignored.
+
+Test ignored.
+
+Process finished with exit code 0
 ```
 

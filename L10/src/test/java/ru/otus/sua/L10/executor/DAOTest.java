@@ -65,7 +65,7 @@ public class DAOTest {
         assertEquals(user3.getName(), dao.getUserName(3, UserDataSet.class));
 
         dao.close();
-        showH2Console();
+        //showH2Console();
     }
 
     private void showH2Console() {
