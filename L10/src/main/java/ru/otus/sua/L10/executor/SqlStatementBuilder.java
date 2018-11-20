@@ -1,20 +1,18 @@
 package ru.otus.sua.L10.executor;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import ru.otus.sua.L10.entity.DataSet;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public class SqlStatementBuilder {
 
     private static Map<Class<?>, String> insertions = new ConcurrentHashMap<>();
     private static Map<String, Integer> insertionsValueCount = new ConcurrentHashMap<>();
     private static Map<Class<?>, String> creations = new ConcurrentHashMap<>();
-
-    private static Logger log = LoggerFactory.getLogger(SqlStatementBuilder.class);
 
     public static String selectionNameById(long id, Class clazz) {
         final String SELECT = "SELECT NAME FROM %s WHERE ID=%s";
@@ -80,7 +78,6 @@ public class SqlStatementBuilder {
         insertionsValueCount.put(statement, valueCount);
         return statement;
     }
-
 
     private static String buildSQLforTableCreation(Class clazz) {
         StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS ");

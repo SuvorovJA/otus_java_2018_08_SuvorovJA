@@ -1,8 +1,7 @@
 package ru.otus.sua.L10.executor;
 
 import lombok.Data;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import ru.otus.sua.L10.database.ConnectionUtils;
 import ru.otus.sua.L10.entity.DataSet;
 
@@ -13,9 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Data
-public class DAO implements DBService {
+@Slf4j
+public class DB implements DBService {
 
-    private static Logger log = LoggerFactory.getLogger(DAO.class);
 
     private final Connection connection;
 
@@ -40,7 +39,7 @@ public class DAO implements DBService {
     }
 
     @Override
-    public String getUserName(long id, Class clazz) {
+    public String getName(long id, Class clazz) {
         Executor exec = new Executor(getConnection());
         final String[] name = new String[1];
         exec.execQuery(SqlStatementBuilder.selectionNameById(id, clazz),
@@ -52,11 +51,11 @@ public class DAO implements DBService {
     }
 
     @Override
-    public <T extends DataSet> void save(T user) {
+    public <T extends DataSet> void save(T entity) {
         Executor exec = new Executor(getConnection());
-        long id = exec.execUpdate(SqlStatementBuilder.dataInsertion(user), (resultSet) -> {
+        long id = exec.execUpdate(SqlStatementBuilder.dataInsertion(entity), (resultSet) -> {
         });
-        user.setId(id);
+        entity.setId(id);
     }
 
     @Override
@@ -66,23 +65,23 @@ public class DAO implements DBService {
             @Override
             public <T extends DataSet> T handle(ResultSet result) throws SQLException {
                 result.next();
-                T user;
+                T entity;
                 try {
-                    user = (T) clazz.getDeclaredConstructor().newInstance();
+                    entity = (T) clazz.getDeclaredConstructor().newInstance();
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     throw new RuntimeException("Fail obj instantiating");
                 }
                 for (Field field : clazz.getDeclaredFields()) {
                     try {
                         field.setAccessible(true);
-                        field.set(user, result.getObject(field.getName()));
+                        field.set(entity, result.getObject(field.getName()));
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException("Fail obj filling");
                     }
                 }
-                user.setId(result.getLong("id"));
-                if (user.getId() != id) throw new RuntimeException("Fail on obj id");
-                return user;
+                entity.setId(result.getLong("id"));
+                if (entity.getId() != id) throw new RuntimeException("Fail on obj id");
+                return entity;
             }
         });
     }

@@ -1,8 +1,7 @@
 package ru.otus.sua.L10.executor;
 
 import lombok.Data;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import ru.otus.sua.L10.entity.DataSet;
 
 import java.sql.Connection;
@@ -11,8 +10,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 @Data
+@Slf4j
 public class Executor {
-    private static Logger log = LoggerFactory.getLogger(Executor.class);
+
     private final Connection connection;
 
     public void execQuery(String query, ResultHandler handler) {
@@ -22,7 +22,7 @@ public class Executor {
             log(query, result);
             handler.handle(result);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.warn(e.getMessage());
         }
     }
 

@@ -1,14 +1,12 @@
 package ru.otus.sua.L10.database;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@Slf4j
 public class ConnectionUtils {
-
-    private static Logger log = LoggerFactory.getLogger(ConnectionUtils.class);
 
     public static Connection getConnection() throws SQLException {
         Connection connection = LocalDatasource.getConnection();

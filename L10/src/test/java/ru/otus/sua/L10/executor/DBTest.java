@@ -1,9 +1,8 @@
 package ru.otus.sua.L10.executor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.otus.sua.L10.database.ConnectionUtils;
 import ru.otus.sua.L10.entity.UserDataSet;
 
@@ -12,13 +11,13 @@ import java.sql.SQLException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-public class DAOTest {
+@Slf4j
+public class DBTest {
 
-    private static Logger log = LoggerFactory.getLogger(DAOTest.class);
     private UserDataSet user1 = new UserDataSet();
     private UserDataSet user2 = new UserDataSet();
     private UserDataSet user3 = new UserDataSet();
-    private DAO dao;
+    private DB db;
 
     @Before
     public void setUp() throws Exception {
@@ -31,14 +30,14 @@ public class DAOTest {
         user2.setName("Test Two");
         user3.setName("Test Three");
 
-        dao = new DAO(ConnectionUtils.getConnection());
-        log.info(dao.getMetaData());
+        db = new DB(ConnectionUtils.getConnection());
+        log.info(db.getMetaData());
 
-        dao.createTables(UserDataSet.class);
+        db.createTables(UserDataSet.class);
 
-        dao.save(user1);
-        dao.save(user2);
-        dao.save(user3);
+        db.save(user1);
+        db.save(user2);
+        db.save(user3);
     }
 
     @Test
@@ -46,36 +45,36 @@ public class DAOTest {
 
         otbivka();
         log.info("origin: " + user1.toString());
-        log.info("loaded: " + dao.load(1, UserDataSet.class).toString());
-        assertEquals(user1, dao.load(1, UserDataSet.class));
+        log.info("loaded: " + db.load(1, UserDataSet.class).toString());
+        assertEquals(user1, db.load(1, UserDataSet.class));
         otbivka();
 
         log.info("origin: " + user2.toString());
-        log.info("loaded: " + dao.load(2, UserDataSet.class).toString());
-        assertEquals(user2, dao.load(2, UserDataSet.class));
+        log.info("loaded: " + db.load(2, UserDataSet.class).toString());
+        assertEquals(user2, db.load(2, UserDataSet.class));
         otbivka();
 
         log.info("origin: " + user3.toString());
-        log.info("loaded: " + dao.load(3, UserDataSet.class).toString());
-        assertEquals(user3, dao.load(3, UserDataSet.class));
+        log.info("loaded: " + db.load(3, UserDataSet.class).toString());
+        assertEquals(user3, db.load(3, UserDataSet.class));
         otbivka();
 
         log.info("origin: " + user3.toString());
-        log.info("loaded: " + dao.getUserName(3, UserDataSet.class));
-        assertEquals(user3.getName(), dao.getUserName(3, UserDataSet.class));
+        log.info("loaded: " + db.getName(3, UserDataSet.class));
+        assertEquals(user3.getName(), db.getName(3, UserDataSet.class));
         otbivka();
 
-        log.info(dao.getUserName(33, UserDataSet.class));
-        assertNotEquals(user3.getName(), dao.getUserName(33, UserDataSet.class));
+        log.info(db.getName(33, UserDataSet.class));
+        assertNotEquals(user3.getName(), db.getName(33, UserDataSet.class));
         otbivka();
 
         user1.setId(53);
         log.info("origin: " + user1.toString());
-        log.info("loaded: " + dao.load(1, UserDataSet.class).toString());
-        assertNotEquals(user1, dao.load(1, UserDataSet.class));
+        log.info("loaded: " + db.load(1, UserDataSet.class).toString());
+        assertNotEquals(user1, db.load(1, UserDataSet.class));
         otbivka();
 
-        dao.close();
+        db.close();
         //showH2Console();
     }
 

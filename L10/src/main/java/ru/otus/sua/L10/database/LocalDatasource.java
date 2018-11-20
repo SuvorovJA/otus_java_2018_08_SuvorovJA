@@ -1,22 +1,20 @@
 package ru.otus.sua.L10.database;
 
+import lombok.extern.slf4j.Slf4j;
 import org.h2.jdbcx.JdbcDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@Slf4j
 public class LocalDatasource {
 
     private static final String LOCAL_DATABASE_DRIVER_NAME = "org.h2.Driver";
-//        private static final String LOCAL_SOURCE_URL = "jdbc:h2:~/test";
+    //        private static final String LOCAL_SOURCE_URL = "jdbc:h2:~/test";
     private static final String LOCAL_SOURCE_URL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
     private static final String LOCAL_SOURCE_LOGIN = "sa";
     private static final String LOCAL_SOURCE_PASSWORD = "sa";
-
-    private static Logger log = LoggerFactory.getLogger(LocalDatasource.class);
 
     private static DataSource ds;
 
