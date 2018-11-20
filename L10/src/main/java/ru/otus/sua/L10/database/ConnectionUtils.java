@@ -12,7 +12,6 @@ public class ConnectionUtils {
 
     public static Connection getConnection() throws SQLException {
         Connection connection = LocalDatasource.getConnection();
-        // Connection connection = ExternalDatasource.getConnection();
         return connection;
     }
 

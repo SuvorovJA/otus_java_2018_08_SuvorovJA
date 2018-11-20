@@ -38,17 +38,16 @@ public class Executor {
         return null;
     }
 
-    public int execUpdate(String query, ResultHandler handler) {
-        int id = -1;
+    public long execUpdate(String query, ResultHandler handler) {
+        long id = -1;
         try (Statement stmt = connection.createStatement()) {
-            stmt.executeUpdate(query,Statement.RETURN_GENERATED_KEYS);
+            stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             ResultSet result = stmt.getResultSet();
             ResultSet ids = stmt.getGeneratedKeys();
             if (ids.next()) {
-                id = ids.getInt(1);
+                id = ids.getLong(1);
             } else {
                 log.error("No returned id");
-                // throw ?
             }
             log(query, result, id);
             handler.handle(result);
@@ -59,7 +58,7 @@ public class Executor {
     }
 
 
-    public int execUpdate(String update)  {
+    public int execUpdateCount(String update) {
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(update);
             log(update, stmt);
@@ -81,13 +80,23 @@ public class Executor {
 
     private void log(String query, ResultSet result) throws SQLException {
         String res = "";
-        if (result.rowUpdated() || result.rowDeleted()  || result.rowInserted()) res = "\tresult(upd/del/ins): " + result.rowUpdated() + "/" + result.rowDeleted() + "/" + result.rowInserted();
+        if (result.rowUpdated() ||
+                result.rowDeleted() ||
+                result.rowInserted())
+            res = "\tresult(upd/del/ins): " +
+                    result.rowUpdated() + "/" +
+                    result.rowDeleted() + "/" +
+                    result.rowInserted();
         log.info("query: " + query + res);
     }
 
-    private void log(String query, ResultSet result, int id) throws SQLException {
+    private void log(String query, ResultSet result, long id) throws SQLException {
         String res = "";
-        if (result != null) res = "\tresult(upd/del/ins): " + result.rowUpdated() + "/" + result.rowDeleted() + "/" + result.rowInserted();
+        if (result != null)
+            res = "\tresult(upd/del/ins): " +
+                    result.rowUpdated() + "/" +
+                    result.rowDeleted() + "/" +
+                    result.rowInserted();
         log.info("query: " + query + res + "\treturnedId=" + id);
     }
 }

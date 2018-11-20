@@ -30,7 +30,7 @@ public class DAO implements DBService {
                     "\tConnected to:\t" + connection.getMetaData().getURL() + "\n" +
                     "\tDB name:\t" + connection.getMetaData().getDatabaseProductName() + "\n" +
                     "\tDB version:\t" + connection.getMetaData().getDatabaseProductVersion() + "\n" +
-                    "\tDriver:\t" + connection.getMetaData().getDriverName();
+                    "\tDriver:\t\t" + connection.getMetaData().getDriverName();
         } catch (SQLException e) {
             log.error(e.getSQLState());
             return "";
@@ -41,7 +41,7 @@ public class DAO implements DBService {
     public void createTables(Class clazz)  {
         Executor exec = new Executor(getConnection());
         String query = createSQLforTableCreation(clazz);
-        exec.execUpdate(query);
+        exec.execUpdateCount(query);
     }
 
     @Override
