@@ -15,10 +15,6 @@ import java.sql.SQLException;
 @Data
 public class DAO implements DBService {
 
-    private static final String INSERT_USER = "INSERT INTO %s (NAME,AGE) VALUES ('%s','%s')";
-    private static final String SELECT_USER = "SELECT * FROM %s WHERE ID = %s";
-    private static final String SELECT_USER_NAME = "SELECT NAME FROM %s WHERE ID=%s";
-
     private static Logger log = LoggerFactory.getLogger(DAO.class);
 
     private final Connection connection;
@@ -38,17 +34,16 @@ public class DAO implements DBService {
     }
 
     @Override
-    public void createTables(Class clazz)  {
+    public void createTables(Class clazz) {
         Executor exec = new Executor(getConnection());
-        String query = createSQLforTableCreation(clazz);
-        exec.execUpdateCount(query);
+        exec.execUpdateCount(SqlStatementBuilder.tableCreation(clazz));
     }
 
     @Override
     public String getUserName(long id, Class clazz) {
         Executor exec = new Executor(getConnection());
         final String[] name = new String[1];
-        exec.execQuery(String.format(SELECT_USER_NAME, clazz.getSimpleName(), id),
+        exec.execQuery(SqlStatementBuilder.selectionNameById(id, clazz),
                 result -> {
                     result.next();
                     name[0] = result.getString("name");
@@ -57,16 +52,17 @@ public class DAO implements DBService {
     }
 
     @Override
-    public <T extends DataSet> void save(T user)  {
+    public <T extends DataSet> void save(T user) {
         Executor exec = new Executor(getConnection());
-        long id = exec.execUpdate(createSQLforDataInsertion(user), (resultSet) -> {});
+        long id = exec.execUpdate(SqlStatementBuilder.dataInsertion(user), (resultSet) -> {
+        });
         user.setId(id);
     }
 
     @Override
-    public <T extends DataSet> T load(long id, Class<T> clazz)  {
+    public <T extends DataSet> T load(long id, Class<T> clazz) {
         Executor exec = new Executor(getConnection());
-        return exec.execQuery(String.format(SELECT_USER, clazz.getSimpleName(), id), new ResultHandlerValued() {
+        return exec.execQuery(SqlStatementBuilder.selectionAllById(id, clazz), new ResultHandlerValued() {
             @Override
             public <T extends DataSet> T handle(ResultSet result) throws SQLException {
                 result.next();
@@ -84,6 +80,8 @@ public class DAO implements DBService {
                         throw new RuntimeException("Fail obj filling");
                     }
                 }
+                user.setId(result.getLong("id"));
+                if (user.getId() != id) throw new RuntimeException("Fail on obj id");
                 return user;
             }
         });
@@ -94,55 +92,5 @@ public class DAO implements DBService {
         ConnectionUtils.closeQuietly(connection);
     }
 
-    private <T extends DataSet> String createSQLforDataInsertion(T user) {
-        StringBuilder sb = new StringBuilder("INSERT INTO  ");
-        sb.append(user.getClass().getSimpleName().toUpperCase());
-        sb.append(" (");
-        for (Field field : user.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            if ("id".equals(field.getName())) continue;
-            sb.append(field.getName().toUpperCase());
-            sb.append(",");
-        }
-        sb.deleteCharAt(sb.lastIndexOf(","));
-        sb.append(") VALUES (");
-        for (Field field : user.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            if ("id".equals(field.getName())) continue;
-            sb.append("'");
-            try {
-                sb.append(field.get(user));
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException("Err in createSQLforDataInsertion");
-            }
-            sb.append("',");
-        }
-        sb.deleteCharAt(sb.lastIndexOf(","));
-        sb.append(");");
-        return sb.toString();
-    }
 
-
-    private String createSQLforTableCreation(Class clazz) {
-        StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS ");
-        sb.append(clazz.getSimpleName());
-        sb.append(" (ID BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,");
-        for (Field field : clazz.getDeclaredFields()) {
-            field.setAccessible(true);
-            if ("id".equals(field.getName())) continue;
-            ParsedFieldSimple f = new ParsedFieldSimple(field);
-            sb.append(f.getName());
-            sb.append(accordanceJavaTypeToSqlType(f));
-            sb.append(",");
-        }
-        sb.deleteCharAt(sb.lastIndexOf(","));
-        sb.append(");");
-        return sb.toString().toUpperCase();
-    }
-
-    private String accordanceJavaTypeToSqlType(ParsedFieldSimple f) {
-        if (f.isString()) return " VARCHAR(255) ";
-        if (f.isInt()) return " INT(3) ";
-        throw new RuntimeException("Unsupported Type");
-    }
 }
