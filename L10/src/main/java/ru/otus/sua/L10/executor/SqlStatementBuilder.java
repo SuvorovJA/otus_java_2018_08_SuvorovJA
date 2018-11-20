@@ -56,20 +56,18 @@ public class SqlStatementBuilder {
         StringBuilder sb = new StringBuilder("INSERT INTO  ");
         sb.append(entity.getClass().getSimpleName().toUpperCase());
         sb.append(" (");
+        int valueCount = 0;
         for (Field field : entity.getClass().getDeclaredFields()) {
             field.setAccessible(true);
             if ("id".equals(field.getName())) continue;
             sb.append(field.getName().toUpperCase());
             sb.append(",");
+            valueCount++;
         }
         sb.deleteCharAt(sb.lastIndexOf(","));
         sb.append(") VALUES (");
-        int valueCount = 0;
-        for (Field field : entity.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            if ("id".equals(field.getName())) continue;
+        for (int i = 1; i <= valueCount; i++) {
             sb.append("'%s',");
-            valueCount++;
         }
         sb.deleteCharAt(sb.lastIndexOf(","));
         sb.append(");");
