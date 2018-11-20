@@ -6,12 +6,12 @@ import ru.otus.sua.L10.entity.DataSet;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 @Slf4j
 public class SqlStatementBuilder {
 
     private static Map<Class<?>, String> insertions = new ConcurrentHashMap<>();
-    private static Map<String, Integer> insertionsValueCount = new ConcurrentHashMap<>();
     private static Map<Class<?>, String> creations = new ConcurrentHashMap<>();
 
     public static String selectionNameById(long id, Class clazz) {
@@ -37,15 +37,14 @@ public class SqlStatementBuilder {
 
 
     private static <T extends DataSet> String fillSQLforDataInsertion(T entity, String statement) {
-        Object[] values = new Object[insertionsValueCount.get(statement)];
+        Object[] values = new Object[ReflectionHelper.getFields(entity.getClass()).size()];
         int index = 0;
-        for (Field field : entity.getClass().getDeclaredFields()) {
+        for (Field field : ReflectionHelper.getFields(entity.getClass())) {
             field.setAccessible(true);
             try {
-                values[index] = field.get(entity);
-                index++;
+                values[index++] = field.get(entity);
             } catch (IllegalAccessException e) {
-                throw new RuntimeException("Err in buildSQLforDataInsertion");
+                throw new RuntimeException("Err in fillSQLforDataInsertion");
             }
             if (index >= values.length) break;
         }
@@ -56,24 +55,15 @@ public class SqlStatementBuilder {
         StringBuilder sb = new StringBuilder("INSERT INTO  ");
         sb.append(entity.getClass().getSimpleName().toUpperCase());
         sb.append(" (");
-        int valueCount = 0;
-        for (Field field : entity.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            if ("id".equals(field.getName())) continue;
-            sb.append(field.getName().toUpperCase());
-            sb.append(",");
-            valueCount++;
-        }
-        sb.deleteCharAt(sb.lastIndexOf(","));
+        sb.append(ReflectionHelper.getFieldNames(entity.getClass(),null));
         sb.append(") VALUES (");
-        for (int i = 1; i <= valueCount; i++) {
+        for (int i = 1; i < ReflectionHelper.getFields(entity.getClass()).size(); i++) {
             sb.append("'%s',");
         }
         sb.deleteCharAt(sb.lastIndexOf(","));
         sb.append(");");
         String statement = sb.toString();
         log.info(statement);
-        insertionsValueCount.put(statement, valueCount);
         return statement;
     }
 
@@ -81,25 +71,25 @@ public class SqlStatementBuilder {
         StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS ");
         sb.append(clazz.getSimpleName());
         sb.append(" (ID BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,");
-        for (Field field : clazz.getDeclaredFields()) {
-            field.setAccessible(true);
-            if ("id".equals(field.getName())) continue;
-            sb.append(field.getName());
-            sb.append(accordanceJavaTypeToSqlType(field));
-            sb.append(",");
-        }
-        sb.deleteCharAt(sb.lastIndexOf(","));
+
+        sb.append(ReflectionHelper.getFieldNames(clazz, new Function<Field, String>() {
+            @Override
+            public String apply(Field field) {
+                return accordanceJavaTypeToSqlType(field);
+            }
+        }));
+
         sb.append(");");
         String statement = sb.toString().toUpperCase();
         log.info(statement);
         return statement;
     }
 
-    private static String accordanceJavaTypeToSqlType(Field f) {
-        if (f.getType().equals(String.class)) return " VARCHAR(255) ";
-        if (f.getType().equals(int.class)) return " INT(3) ";
-        throw new RuntimeException("Unsupported ORM Type");
-    }
+        private static String accordanceJavaTypeToSqlType(Field f) {
+            if (f.getType().equals(String.class)) return " VARCHAR(255) ";
+            if (f.getType().equals(int.class)) return " INT(3) ";
+            throw new RuntimeException("Unsupported ORM Type");
+        }
 
 
 }

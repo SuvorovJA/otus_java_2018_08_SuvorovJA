@@ -71,7 +71,7 @@ public class DB implements DBService {
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     throw new RuntimeException("Fail obj instantiating");
                 }
-                for (Field field : clazz.getDeclaredFields()) {
+                for (Field field : ReflectionHelper.getFields(clazz)) {
                     try {
                         field.setAccessible(true);
                         field.set(entity, result.getObject(field.getName()));
@@ -79,8 +79,6 @@ public class DB implements DBService {
                         throw new RuntimeException("Fail obj filling");
                     }
                 }
-                entity.setId(result.getLong("id"));
-                if (entity.getId() != id) throw new RuntimeException("Fail on obj id");
                 return entity;
             }
         });
