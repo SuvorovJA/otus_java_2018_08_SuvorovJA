@@ -1,6 +1,6 @@
-package ru.otus.sua.L10.executor;
+package ru.otus.sua.L11.dbservice;
 
-import ru.otus.sua.L10.entity.DataSet;
+import ru.otus.sua.L11.entity.DataSet;
 
 import java.sql.SQLException;
 
