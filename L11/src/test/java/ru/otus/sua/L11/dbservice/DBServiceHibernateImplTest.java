@@ -2,6 +2,7 @@ package ru.otus.sua.L11.dbservice;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.internal.SessionImpl;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import ru.otus.sua.L11.dbservice.database.HibernateFactorySessionHolder;
@@ -25,6 +26,11 @@ public class DBServiceHibernateImplTest {
     private UserDataSet user3 = new UserDataSet();
     private UberUserDataSet uber1 = new UberUserDataSet();
     private DBServiceHibernateImpl db;
+
+    @After
+    public void cleanDb() throws Exception {
+        db.close();
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -53,6 +59,7 @@ public class DBServiceHibernateImplTest {
                 new PhoneDataSet("999", uber1)));
         uber1.setAddress(new AddressDataSet("USSR", uber1));
 
+        HibernateFactorySessionHolder.createNewSessionFactory();
         db = new DBServiceHibernateImpl();
         log.info(db.getMetaData());
 
@@ -61,7 +68,6 @@ public class DBServiceHibernateImplTest {
         db.save(user3);
         db.save(uber1);
 
-//        showH2Console();
     }
 
 
@@ -98,8 +104,20 @@ public class DBServiceHibernateImplTest {
         assertEquals(uber1, loadedU);
         otbivka("");
 
+    }
 
-        db.close();
+    @Test(expected = UnsupportedOperationException.class)
+    public void createTables() throws SQLException {
+        db.createTables(UserDataSet.class);
+    }
+
+    @Test
+    public void getByName() throws Exception {
+        otbivka("FIND OBJ BY NAME FIELD");
+        log.info(">>>>>>> origin: " + user2.toString());
+        UserDataSet loaded = db.getByName("Test Two", UserDataSet.class);
+        log.info(">>>>>>> loaded: " + loaded.toString());
+        assertEquals(user2, loaded);
     }
 
     private void test(UserDataSet userDataSet, int id) throws SQLException {
@@ -108,12 +126,6 @@ public class DBServiceHibernateImplTest {
         log.info(">>>>>>> loaded: " + loaded1.toString());
         assertEquals(userDataSet, loaded1);
         otbivka("");
-    }
-
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void createTables() throws SQLException {
-        db.createTables(UserDataSet.class);
     }
 
     private void otbivka(String msg) {
@@ -128,6 +140,4 @@ public class DBServiceHibernateImplTest {
             e.printStackTrace();
         }
     }
-
-
 }

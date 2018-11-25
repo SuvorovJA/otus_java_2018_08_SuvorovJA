@@ -9,7 +9,10 @@ public interface DBService extends AutoCloseable {
 
     void createTables(Class clazz) throws SQLException;
 
+    @Deprecated
     String getName(long id, Class clazz) throws SQLException;
+
+    <T extends DataSet> T  getByName(String name, Class clazz) throws SQLException;
 
     <T extends DataSet> void save(T entity) throws SQLException;
 

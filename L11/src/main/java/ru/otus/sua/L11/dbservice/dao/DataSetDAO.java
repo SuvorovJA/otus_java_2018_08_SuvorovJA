@@ -1,5 +1,6 @@
 package ru.otus.sua.L11.dbservice.dao;
 
+import lombok.Getter;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.otus.sua.L11.dbservice.database.HibernateFactorySessionHolder;
@@ -8,6 +9,15 @@ import ru.otus.sua.L11.entity.DataSet;
 import java.io.Serializable;
 import java.util.function.Supplier;
 
+
+/**
+ * The scope of a Hibernate org.hibernate.Session is flexible but you should never
+ * design your application to use a new Hibernate org.hibernate.Session for every
+ * database operation. Even though it is used in the following examples, consider
+ * session-per-operation an anti-pattern. //TODO make DAO as field in DBServiceImpl
+ *
+ */
+@Getter
 public abstract class DataSetDAO<T extends DataSet, K extends Serializable> implements DAO<T, K> {
 
     private Session session;

@@ -31,18 +31,29 @@ public class HibernateFactorySessionHolder {
     private static SessionFactory sessionFactory;
 
     static {
-        Configuration configuration = HibernateConfiguration.getConfig();
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
-        builder.applySettings(configuration.getProperties());
-        ServiceRegistry serviceRegistry = builder.build();
-        sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+        createNewSessionFactory();
+    }
+
+    public static void createNewSessionFactory() {
+        if (sessionFactory == null || sessionFactory.isClosed()) {
+            Configuration configuration = HibernateConfiguration.getConfig();
+            StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
+            builder.applySettings(configuration.getProperties());
+            ServiceRegistry serviceRegistry = builder.build();
+            sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+        }
     }
 
     public static Session getSession() {
         return sessionFactory.openSession();
     }
 
-    public static DatabaseMetaData getMetaData() {
+    public static void shutdown() {
+        // TODO ERROR o.h.e.j.c.i.DriverManagerConnectionProviderImpl - Connection leak detected: there are 1 unclosed connections upon shutting down pool jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
+        sessionFactory.close();
+    }
+
+    public static DatabaseMetaData getMetaData()  {
         Connection connection = ((SessionImpl) getSession()).connection();
         DatabaseMetaData databaseMetaData = null;
         try {

@@ -14,6 +14,8 @@ public interface DAO<T extends DataSet, K extends Serializable> extends AutoClos
 
     void delete(T entity);
 
+    T findByName(String name);
+
     @Override
     void close() throws Exception;
 

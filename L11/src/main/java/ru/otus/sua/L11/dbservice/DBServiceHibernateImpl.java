@@ -37,11 +37,16 @@ public class DBServiceHibernateImpl implements DBService {
     @Override
     public String getName(long id, Class clazz) throws SQLException {
         if (UserDataSet.class.isAssignableFrom(clazz)) {
-            UserDataSet result = (UserDataSet) load(id,clazz);
+            UserDataSet result = (UserDataSet) load(id, clazz);
             return result.getName();
         } else {
             throw new UnsupportedOperationException();
         }
+    }
+
+    @Override
+    public <T extends DataSet> T getByName(String name, Class clazz) throws SQLException {
+        return (T) (new UserDataSetDAO(clazz)).findByName(name);
     }
 
     @Override
@@ -56,6 +61,6 @@ public class DBServiceHibernateImpl implements DBService {
 
     @Override
     public void close() throws Exception {
-
+        HibernateFactorySessionHolder.shutdown();
     }
 }
