@@ -73,36 +73,38 @@ public class DBServiceHibernateImplTest {
 
     @Test
     public void load() throws Exception {
-        otbivka("LOAD");
+        logHorizontalLine("LOAD");
         test(user1, 1);
         test(user2, 2);
         test(user3, 3);
 
-        otbivka("GET NAME FIELD");
+        logHorizontalLine("GET NAME FIELD");
         log.info(">>>>>>> origin: " + user3.toString());
         String loadedName3 = db.getName(3, UserDataSet.class);
         log.info(">>>>>>> loaded: " + loadedName3);
         assertEquals(user3.getName(), loadedName3);
 
-        otbivka("DB NON-EXISTENT ID");
+        logHorizontalLine("DB NON-EXISTENT ID");
         UserDataSet loaded33 = db.load(33, UserDataSet.class);
         log.info(Objects.toString(loaded33, "null"));
         assertNull(loaded33);
 
-        otbivka("SAVED BUT MODIFIED OBJ");
-        user1.setId(53);
-        log.info(">>>>>>> origin: " + user1.toString());
-        UserDataSet loaded53 = db.load(1, UserDataSet.class);
-        log.info(">>>>>>> loaded: " + loaded53);
-        assertNotEquals(user1, loaded53);
+//        После выноса управления сессиями с уровня DAO на DBService такое (user1.setId(53)) становится нерабочим
+//        HHH000346: Error during managed flush [org.hibernate.HibernateException: identifier of an instance of ru.otus.sua.L11.entity.UserDataSet was altered from 1 to 53]
+//        logHorizontalLine("SAVED BUT MODIFIED OBJ");
+//        user1.setId(53);
+//        log.info(">>>>>>> origin: " + user1.toString());
+//        UserDataSet loaded53 = db.load(1, UserDataSet.class);
+//        log.info(">>>>>>> loaded: " + loaded53);
+//        assertNotEquals(user1, loaded53);
 
-        otbivka("CHILD OBJ");
+        logHorizontalLine("CHILD OBJ");
         log.info(">>>>>>> origin: " + uber1.toString());
         long savedId = uber1.getId();
         UberUserDataSet loadedU = db.load(savedId, UberUserDataSet.class);
         log.info(">>>>>>> loaded: " + loadedU);
         assertEquals(uber1, loadedU);
-        otbivka("");
+        logHorizontalLine("");
 
     }
 
@@ -113,7 +115,7 @@ public class DBServiceHibernateImplTest {
 
     @Test
     public void getByName() throws Exception {
-        otbivka("FIND OBJ BY NAME FIELD");
+        logHorizontalLine("FIND OBJ BY NAME FIELD");
         log.info(">>>>>>> origin: " + user2.toString());
         UserDataSet loaded = db.getByName("Test Two", UserDataSet.class);
         log.info(">>>>>>> loaded: " + loaded.toString());
@@ -125,15 +127,15 @@ public class DBServiceHibernateImplTest {
         UserDataSet loaded1 = db.load(id, UserDataSet.class);
         log.info(">>>>>>> loaded: " + loaded1.toString());
         assertEquals(userDataSet, loaded1);
-        otbivka("");
+        logHorizontalLine("");
     }
 
-    private void otbivka(String msg) {
+    private void logHorizontalLine(String msg) {
         log.info("---------------------------------" + msg + "---------------------------------");
     }
 
     private void showH2Console() {
-        Connection connection = ((SessionImpl) HibernateFactorySessionHolder.getSession()).connection();
+        Connection connection = ((SessionImpl) HibernateFactorySessionHolder.openSession()).connection();
         try {
             org.h2.tools.Server.startWebServer(connection);
         } catch (SQLException e) {

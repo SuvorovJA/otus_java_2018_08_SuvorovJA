@@ -2,6 +2,7 @@ package ru.otus.sua.L11.dbservice;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
 import ru.otus.sua.L11.dbservice.dao.UserDataSetDAO;
 import ru.otus.sua.L11.dbservice.database.HibernateFactorySessionHolder;
 import ru.otus.sua.L11.entity.DataSet;
@@ -13,6 +14,12 @@ import java.sql.SQLException;
 @Data
 @Slf4j
 public class DBServiceHibernateImpl implements DBService {
+
+    private Session session;
+
+    public DBServiceHibernateImpl(){
+        session = HibernateFactorySessionHolder.openSession();
+    }
 
     @Override
     public String getMetaData() {
@@ -46,21 +53,22 @@ public class DBServiceHibernateImpl implements DBService {
 
     @Override
     public <T extends DataSet> T getByName(String name, Class clazz) throws SQLException {
-        return (T) (new UserDataSetDAO(clazz)).findByName(name);
+        return (T) (new UserDataSetDAO(session,clazz)).findByName(name);
     }
 
     @Override
     public <T extends DataSet> void save(T entity) throws SQLException {
-        entity.setId((Long) (new UserDataSetDAO(entity.getClass())).create(entity));
+        (new UserDataSetDAO(session,entity.getClass())).create(entity);
     }
 
     @Override
     public <T extends DataSet> T load(long id, Class<T> clazz) throws SQLException {
-        return (T) (new UserDataSetDAO(clazz)).read(id);
+        return (T) (new UserDataSetDAO(session,clazz)).read(id);
     }
 
     @Override
     public void close() throws Exception {
+        session.close();
         HibernateFactorySessionHolder.shutdown();
     }
 }

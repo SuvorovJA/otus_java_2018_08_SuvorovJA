@@ -44,7 +44,7 @@ public class HibernateFactorySessionHolder {
         }
     }
 
-    public static Session getSession() {
+    public static Session openSession() {
         return sessionFactory.openSession();
     }
 
@@ -54,7 +54,7 @@ public class HibernateFactorySessionHolder {
     }
 
     public static DatabaseMetaData getMetaData()  {
-        Connection connection = ((SessionImpl) getSession()).connection();
+        Connection connection = ((SessionImpl) openSession()).connection();
         DatabaseMetaData databaseMetaData = null;
         try {
             databaseMetaData = connection.getMetaData();

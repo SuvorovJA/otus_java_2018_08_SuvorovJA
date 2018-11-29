@@ -1,9 +1,10 @@
 package ru.otus.sua.L11.dbservice.dao;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import ru.otus.sua.L11.dbservice.database.HibernateFactorySessionHolder;
 import ru.otus.sua.L11.entity.DataSet;
 
 import java.io.Serializable;
@@ -18,15 +19,12 @@ import java.util.function.Supplier;
  *
  */
 @Getter
+@Slf4j
+@AllArgsConstructor
 public abstract class DataSetDAO<T extends DataSet, K extends Serializable> implements DAO<T, K> {
 
     private Session session;
     private Class<T> type;
-
-    public DataSetDAO(Class<T> type) {
-        session = HibernateFactorySessionHolder.getSession();
-        this.type = type;
-    }
 
     @Override
     public K create(T entity) {
@@ -52,11 +50,6 @@ public abstract class DataSetDAO<T extends DataSet, K extends Serializable> impl
             session.delete(entity);
             return null;
         });
-    }
-
-    @Override
-    public void close() throws Exception {
-        session.close();
     }
 
     protected <R> R runInTransaction(Supplier<R> supplier) {

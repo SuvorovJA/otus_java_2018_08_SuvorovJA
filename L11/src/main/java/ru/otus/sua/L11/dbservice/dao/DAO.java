@@ -4,7 +4,7 @@ import ru.otus.sua.L11.entity.DataSet;
 
 import java.io.Serializable;
 
-public interface DAO<T extends DataSet, K extends Serializable> extends AutoCloseable {
+public interface DAO<T extends DataSet, K extends Serializable> {
 
     K create(T entity);
 
@@ -15,8 +15,5 @@ public interface DAO<T extends DataSet, K extends Serializable> extends AutoClos
     void delete(T entity);
 
     T findByName(String name);
-
-    @Override
-    void close() throws Exception;
 
 }
