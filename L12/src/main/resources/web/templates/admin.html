@@ -1,0 +1,24 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>ADMIN</title>
+</head>
+<body>
+<div class="top">
+    <img src="logo.png"/>
+    <br/>
+    ${loggedin?then('<a href="logout">Logout</a>','<a href="login">Login</a>')} <a href="admin">Admin</a>
+</div>
+
+<div class="admin">
+    <p>Current login: ${login}</p>
+
+<#if loggedinAsAdmin>
+    <p>YOU ADMIN</p>
+<#else>
+    <p>YOU NONADMIN</p>
+</#if>
+
+</div>
+</body>
+</html>
