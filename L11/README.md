@@ -24,6 +24,14 @@ class PhoneDataSet{
 
 Добавить соответствущие датасеты и DAO. 
 
+##### Материалы
+
+[Why is Hibernate Open Session in View considered a bad practice?](https://stackoverflow.com/questions/1103363/why-is-hibernate-open-session-in-view-considered-a-bad-practice)
+[The OpenSessionInView antipattern](https://blog.frankel.ch/the-opensessioninview-antipattern/)
+[Open Session in View](https://developer.jboss.org/wiki/OpenSessionInView)
+[what is current_session_context_class in hibernate configuration xml](http://rbyjava.blogspot.com/2012/05/what-is-currentsessioncontextclass-in.html)
+[HibernateException: No Hibernate Session Bound to Thread in Hibernate 3](https://www.baeldung.com/no-hibernate-session-bound-to-thread-exception)
+[Hibernate openSession() vs getCurrentSession()](https://stackoverflow.com/questions/8046662/hibernate-opensession-vs-getcurrentsession)
 
 ##### Решение
 
