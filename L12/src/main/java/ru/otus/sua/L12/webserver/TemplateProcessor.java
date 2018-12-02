@@ -5,8 +5,6 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.ServletContext;
-import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -19,7 +17,7 @@ class TemplateProcessor {
 
     TemplateProcessor() {
         configuration = new Configuration(Configuration.VERSION_2_3_28);
-        configuration.setClassLoaderForTemplateLoading(this.getClass().getClassLoader(),WebserverConfiguration.HTML_TEMPLATES_DIR);
+        configuration.setClassLoaderForTemplateLoading(this.getClass().getClassLoader(), TemplateConstants.HTML_TEMPLATES_DIR);
         configuration.setDefaultEncoding("UTF-8");
     }
 

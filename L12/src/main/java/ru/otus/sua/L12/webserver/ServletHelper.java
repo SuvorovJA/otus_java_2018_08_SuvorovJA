@@ -37,12 +37,12 @@ class ServletHelper {
         if (additionalPageVariables != null && !additionalPageVariables.isEmpty())
             pageVariables.putAll(additionalPageVariables);
 
-        pageVariables.put(WebserverConfiguration.LOGIN_TEMPLATE_VARIABLE_NAME, login);
+        pageVariables.put(TemplateConstants.LOGIN_TEMPLATE_VARIABLE_NAME, login);
 
-        pageVariables.put(WebserverConfiguration.LOGGED_STATUS_TEMPLATE_VARIABLE_NAME,
+        pageVariables.put(TemplateConstants.LOGGED_STATUS_TEMPLATE_VARIABLE_NAME,
                 (!login.equals(WebserverConfiguration.DEFAULT_USER_NAME)));
 
-        pageVariables.put(WebserverConfiguration.ADMIN_LOGGED_STATUS_TEMPLATE_VARIABLE_NAME,
+        pageVariables.put(TemplateConstants.ADMIN_LOGGED_STATUS_TEMPLATE_VARIABLE_NAME,
                 (login.equals(WebserverConfiguration.DEFAULT_ADMIN_USER_NAME)));
 
         return templateProcessor.getPage(page, pageVariables);

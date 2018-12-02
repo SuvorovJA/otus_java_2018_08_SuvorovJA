@@ -15,13 +15,13 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String requestLogin = Objects.toString(
-                request.getParameter(WebserverConfiguration.LOGIN_FORM_LOGIN_PARAMETER_NAME),
+                request.getParameter(TemplateConstants.LOGIN_FORM_LOGIN_PARAMETER_NAME),
                 WebserverConfiguration.DEFAULT_USER_NAME);
 
         ServletHelper.saveLoginToSession(request, requestLogin);
         ServletHelper.setOK(response);
         response.getWriter().println(
-                ServletHelper.getPage(WebserverConfiguration.LOGIN_PAGE_TEMPLATE, requestLogin, null));
+                ServletHelper.getPage(TemplateConstants.LOGIN_PAGE_TEMPLATE, requestLogin, null));
     }
 
     @Override
