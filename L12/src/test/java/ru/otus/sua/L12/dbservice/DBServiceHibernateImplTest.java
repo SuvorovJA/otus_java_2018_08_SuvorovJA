@@ -44,12 +44,12 @@ public class DBServiceHibernateImplTest {
         user3 = new UserDataSet("Test Three", 33,
                 Arrays.asList(new PhoneDataSet("+5 5555 555 505", user3)),
                 new AddressDataSet("str.Vano 10", user3));
-        user1.getPhones().forEach(phoneDataSet -> phoneDataSet.setUser(user1));
-        user2.getPhones().forEach(phoneDataSet -> phoneDataSet.setUser(user2));
-        user3.getPhones().forEach(phoneDataSet -> phoneDataSet.setUser(user3));
-        user1.getAddress().setUser(user1);
-        user2.getAddress().setUser(user2);
-        user3.getAddress().setUser(user3);
+//        user1.getPhones().forEach(phoneDataSet -> phoneDataSet.setUser(user1));
+//        user2.getPhones().forEach(phoneDataSet -> phoneDataSet.setUser(user2));
+//        user3.getPhones().forEach(phoneDataSet -> phoneDataSet.setUser(user3));
+//        user1.getAddress().setUser(user1);
+//        user2.getAddress().setUser(user2);
+//        user3.getAddress().setUser(user3);
 
         uber1.setName("Uber U");
         uber1.setAge(100);

@@ -3,6 +3,7 @@ package ru.otus.sua.L12.dbservice;
 import ru.otus.sua.L12.entity.DataSet;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface DBService extends AutoCloseable {
     String getMetaData();
@@ -17,5 +18,9 @@ public interface DBService extends AutoCloseable {
     <T extends DataSet> void save(T entity) throws SQLException;
 
     <T extends DataSet> T load(long id, Class<T> clazz) throws SQLException;
+
+    <T extends DataSet> List<T> loadAll(Class<T> clazz) throws SQLException;
+
+    <T extends DataSet> long count(Class<T> clazz) throws SQLException;
 
 }

@@ -25,6 +25,12 @@ public class AddressDataSet extends ru.otus.sua.L12.entity.DataSet {
     @OneToOne(optional = false)
     private UserDataSet user;
 
+    public AddressDataSet(String address){
+        this.street = address;
+        this.user = new UserDataSet();
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

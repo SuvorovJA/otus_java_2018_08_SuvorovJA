@@ -3,6 +3,7 @@ package ru.otus.sua.L12.dbservice.dao;
 import ru.otus.sua.L12.entity.DataSet;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface DAO<T extends DataSet, K extends Serializable> {
 
@@ -15,5 +16,9 @@ public interface DAO<T extends DataSet, K extends Serializable> {
     void delete(T entity);
 
     T findByName(String name);
+
+    long count();
+
+    List<T> readAll();
 
 }

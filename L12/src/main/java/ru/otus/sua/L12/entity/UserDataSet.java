@@ -10,8 +10,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@ToString(callSuper=true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "users")
 public class UserDataSet extends DataSet {
@@ -22,12 +21,28 @@ public class UserDataSet extends DataSet {
     @Basic
     private int age;
 
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<PhoneDataSet> phones;
 
     @OneToOne(optional = false, cascade = CascadeType.ALL, mappedBy = "user")
     @JoinColumn(name = "address_id")
     private AddressDataSet address;
+
+
+    public UserDataSet(String name, int age, List<PhoneDataSet> phones, AddressDataSet address) {
+        this.name = name;
+        if (age < 0) {
+            this.age = 0;
+        } else {
+            this.age = age;
+        }
+        this.phones = phones;
+        if (phones != null)
+            this.getPhones().forEach(phoneDataSet -> phoneDataSet.setUser(this));
+        this.address = address;
+        if (address != null)
+            this.getAddress().setUser(this);
+    }
 
 
     @Override

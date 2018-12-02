@@ -10,6 +10,7 @@ import ru.otus.sua.L12.entity.UserDataSet;
 
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.List;
 
 @Data
 @Slf4j
@@ -64,6 +65,16 @@ public class DBServiceHibernateImpl implements DBService {
     @Override
     public <T extends DataSet> T load(long id, Class<T> clazz) throws SQLException {
         return (T) (new UserDataSetDAO(session,clazz)).read(id);
+    }
+
+    @Override
+    public <T extends DataSet> List<T> loadAll(Class<T> clazz) throws SQLException {
+        return  (new UserDataSetDAO(session,clazz)).readAll();
+    }
+
+    @Override
+    public <T extends DataSet> long count(Class<T> clazz) throws SQLException {
+        return  (new UserDataSetDAO(session,clazz)).count();
     }
 
     @Override

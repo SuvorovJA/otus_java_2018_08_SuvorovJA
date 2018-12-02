@@ -25,6 +25,12 @@ public class PhoneDataSet extends DataSet {
     @ManyToOne(optional = false)
     private UserDataSet user;
 
+    public PhoneDataSet(String phone){
+        this.phone = phone;
+        this.user = new UserDataSet();
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
