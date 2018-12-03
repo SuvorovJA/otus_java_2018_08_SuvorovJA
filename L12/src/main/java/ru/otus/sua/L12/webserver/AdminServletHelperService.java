@@ -16,13 +16,13 @@ import java.util.Objects;
 
 
 @Slf4j
-class AdminServletHelper {
+class AdminServletHelperService {
 
     private HttpServletRequest request;
     private Map<String, Object> pageVariables;
     private DBService dbService;
 
-    AdminServletHelper(HttpServletRequest request, Map<String, Object> pageVariables){
+    AdminServletHelperService(HttpServletRequest request, Map<String, Object> pageVariables){
         this.request = request;
         this.pageVariables = pageVariables;
         dbService = (DBService) request.getServletContext().getAttribute(WebserverConfiguration.DBSERVICE);

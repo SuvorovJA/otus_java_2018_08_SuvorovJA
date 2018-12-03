@@ -1,12 +1,10 @@
 package ru.otus.sua.L12.webserver;
 
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
-import ru.otus.sua.L12.dbservice.DBServiceHibernateImpl;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -23,22 +21,14 @@ public class WebserverConfiguration {
     static final String LOGIN_SESSION_PARAMETER_NAME = "login";
     //
     static final String LOGIN_SERVLET_PATH = "/login";
+    static final int PORT = 8090;
     private static final String ADMIN_SERVLET_PATH = "/admin";
     private static final String LOGOUT_SERVLET_PATH = "/logout";
-    private static final int PORT = 8090;
     private static final String STATIC_CONTENT = "web/static_content";
 
-    public static void runServer() throws Exception {
-        Server server = WebserverConfiguration.getServer();
-        server.start();
-        server.join();
-    }
-
-    private static Server getServer() {
+    public static ServletContextHandler getConfiguration() {
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-
-        context.getServletContext().setAttribute(DBSERVICE, new DBServiceHibernateImpl());
 
         context.setContextPath("/");
         context.setBaseResource(getWebRootResource());
@@ -54,11 +44,7 @@ public class WebserverConfiguration {
         holderPwd.setInitParameter("dirAllowed", "true");
         context.addServlet(holderPwd, "/");
 
-        Server server = new Server(PORT);
-        server.setHandler(context);
-
-        return server;
-
+        return context;
     }
 
     private static Resource getWebRootResource() {

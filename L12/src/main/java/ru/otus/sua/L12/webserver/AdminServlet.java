@@ -25,7 +25,7 @@ public class AdminServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + WebserverConfiguration.LOGIN_SERVLET_PATH);
 
         Map<String, Object> pageVariables = new HashMap<>();
-        AdminServletHelper helper = new AdminServletHelper(request, pageVariables);
+        AdminServletHelperService helper = new AdminServletHelperService(request, pageVariables);
 
         switch (Objects.toString(request.getParameter(TemplateConstants.ADMIN_PAGE_ACTION), "undef")) {
             case (TemplateConstants.ADMIN_PAGE_ACTION_ADDUSER):
@@ -50,7 +50,7 @@ public class AdminServlet extends HttpServlet {
         String authLogin = ServletHelper.readLoginFromSession(request);
         log.info("Attempt get-access to admin page as: {} ", authLogin);
         Map<String, Object> pageVariables = new HashMap<>();
-        AdminServletHelper helper = new AdminServletHelper(request, pageVariables);
+        AdminServletHelperService helper = new AdminServletHelperService(request, pageVariables);
         if (authLogin.equals(WebserverConfiguration.DEFAULT_ADMIN_USER_NAME)) helper.setUserCounter();
         response.getWriter().println(ServletHelper.getPage(TemplateConstants.ADMIN_PAGE_TEMPLATE, authLogin, pageVariables));
     }
