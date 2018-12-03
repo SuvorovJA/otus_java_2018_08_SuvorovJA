@@ -27,6 +27,7 @@ public class AdminServlet extends HttpServlet {
         action.action(request.getParameter(TemplateConstants.ADMIN_PAGE_ACTION));
         action.setUserCounter();
 
+        ServletHelper.setOK(response);
         response.getWriter().println(
                 TemplateProcessor.getPage(TemplateConstants.ADMIN_PAGE_TEMPLATE, authLogin, action.getTemplateVariables()));
     }
@@ -41,6 +42,7 @@ public class AdminServlet extends HttpServlet {
         AdminServletAction action = new AdminServletAction(dbService, request);
         if (authLogin.equals(WebserverConfiguration.DEFAULT_ADMIN_USER_NAME)) action.setUserCounter();
 
+        ServletHelper.setOK(response);
         response.getWriter().println(
                 TemplateProcessor.getPage(TemplateConstants.ADMIN_PAGE_TEMPLATE, authLogin, action.getTemplateVariables()));
     }

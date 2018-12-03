@@ -27,6 +27,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String previousLogin = ServletHelper.readLoginFromSession(request);
+        ServletHelper.setOK(response);
         response.getWriter().println(
                 TemplateProcessor.getPage(TemplateConstants.LOGIN_PAGE_TEMPLATE, previousLogin, null));
     }
