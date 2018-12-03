@@ -21,14 +21,14 @@ public class LoginServlet extends HttpServlet {
         ServletHelper.saveLoginToSession(request, requestLogin);
         ServletHelper.setOK(response);
         response.getWriter().println(
-                ServletHelper.getPage(request,TemplateConstants.LOGIN_PAGE_TEMPLATE, requestLogin, null));
+                TemplateProcessor.getPage(TemplateConstants.LOGIN_PAGE_TEMPLATE, requestLogin, null));
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String previousLogin = ServletHelper.readLoginFromSession(request);
         response.getWriter().println(
-                ServletHelper.getPage(request,TemplateConstants.LOGIN_PAGE_TEMPLATE, previousLogin, null));
+                TemplateProcessor.getPage(TemplateConstants.LOGIN_PAGE_TEMPLATE, previousLogin, null));
     }
 
 }

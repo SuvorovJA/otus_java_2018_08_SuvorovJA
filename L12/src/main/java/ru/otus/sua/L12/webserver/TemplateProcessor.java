@@ -12,17 +12,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-public class TemplateProcessor {
+class TemplateProcessor {
 
-    private Configuration configuration;
+    private static Configuration configuration;
 
-    public TemplateProcessor() {
+    static {
         configuration = new Configuration(Configuration.VERSION_2_3_28);
-        configuration.setClassLoaderForTemplateLoading(this.getClass().getClassLoader(), TemplateConstants.HTML_TEMPLATES_DIR);
+        configuration.setClassLoaderForTemplateLoading(TemplateProcessor.class.getClassLoader(), TemplateConstants.HTML_TEMPLATES_DIR);
         configuration.setDefaultEncoding("UTF-8");
     }
 
-    public String getPage(String page, String login, Map<String, Object> additionalPageVariables) {
+    static String getPage(String page, String login, Map<String, Object> additionalPageVariables) {
         Map<String, Object> pageVariables = new HashMap<>();
 
         if (additionalPageVariables != null && !additionalPageVariables.isEmpty())
@@ -39,7 +39,7 @@ public class TemplateProcessor {
         return getPage(page, pageVariables);
     }
 
-    private String getPage(String filename, Map<String, Object> data) {
+    private static String getPage(String filename, Map<String, Object> data) {
         try (Writer stream = new StringWriter()) {
             Template template = configuration.getTemplate(filename);
             template.process(data, stream);

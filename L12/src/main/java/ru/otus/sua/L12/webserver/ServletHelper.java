@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
@@ -29,12 +28,6 @@ class ServletHelper {
     static void setOK(HttpServletResponse response) {
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
-    }
-
-    static String getPage(HttpServletRequest request, String page, String login, Map<String, Object> additionalPageVariables) {
-        TemplateProcessor templateProcessor = (TemplateProcessor) request.getServletContext()
-                .getAttribute(WebserverConfiguration.TEMPLATE_SERVICE_CONTEXT_PARAMETER_NAME);
-        return templateProcessor.getPage(page, login, additionalPageVariables);
     }
 
 }

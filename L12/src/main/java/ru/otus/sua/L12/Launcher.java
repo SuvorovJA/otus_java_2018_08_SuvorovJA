@@ -5,7 +5,6 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import ru.otus.sua.L12.dbservice.DBService;
 import ru.otus.sua.L12.dbservice.DBServiceHibernateImpl;
 import ru.otus.sua.L12.webserver.JettyServerWrapper;
-import ru.otus.sua.L12.webserver.TemplateProcessor;
 import ru.otus.sua.L12.webserver.WebserverConfiguration;
 
 
