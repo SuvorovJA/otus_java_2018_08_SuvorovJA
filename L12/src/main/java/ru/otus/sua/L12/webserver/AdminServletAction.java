@@ -26,7 +26,33 @@ class AdminServletAction {
         return pageVariables;
     }
 
-    void setUserNameById() {
+    void setUserCounter() {
+        try {
+            long count = dbService.count(UserDataSet.class);
+            log.info("In database {} users", count);
+            pageVariables.put(TemplateConstants.USERCOUNTER_TEMPLATE_VARIABLE_NAME, count);
+        } catch (SQLException e) {
+            log.error("Can't count users");
+            pageVariables.put(TemplateConstants.USERCOUNTER_TEMPLATE_VARIABLE_NAME, "Can't count users");
+        }
+    }
+
+    void action(final String ACTION) {
+        switch (Objects.toString(ACTION, "undef")) {
+            case (TemplateConstants.ADMIN_PAGE_ACTION_ADDUSER):
+                saveNewUser();
+                break;
+            case (TemplateConstants.ADMIN_PAGE_ACTION_GETUSERLIST):
+                setAllUsersList();
+                break;
+            case (TemplateConstants.ADMIN_PAGE_ACTION_GETUSERNAME):
+                setUserNameById();
+                break;
+        }
+    }
+
+
+    private void setUserNameById() {
         String userId = Objects.toString(request.getParameter(TemplateConstants.FINDUSER_FORM_ID_PARAMETER_NAME), "");
         int id;
 
@@ -48,7 +74,7 @@ class AdminServletAction {
         }
     }
 
-    void setAllUsersList() {
+    private void setAllUsersList() {
         List<UserDataSet> users;
         try {
             users = dbService.loadAll(UserDataSet.class);
@@ -69,7 +95,7 @@ class AdminServletAction {
 
     }
 
-    void saveNewUser() {
+    private void saveNewUser() {
 
         String userName = Objects.toString(request.getParameter(TemplateConstants.ADDUSER_FORM_NAME_PARAMETER_NAME), "");
         if (userName.isEmpty()) {
@@ -103,17 +129,6 @@ class AdminServletAction {
             pageVariables.put(TemplateConstants.USER_CREATION_STATUS_TEMPLATE_VARIABLE_NAME, "<strong>FAIL</strong>");
         }
 
-    }
-
-    void setUserCounter() {
-        try {
-            long count = dbService.count(UserDataSet.class);
-            log.info("In database {} users", count);
-            pageVariables.put(TemplateConstants.USERCOUNTER_TEMPLATE_VARIABLE_NAME, count);
-        } catch (SQLException e) {
-            log.error("Can't count users");
-            pageVariables.put(TemplateConstants.USERCOUNTER_TEMPLATE_VARIABLE_NAME, "Can't count users");
-        }
     }
 
 }
