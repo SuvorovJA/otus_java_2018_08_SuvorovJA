@@ -1,6 +1,5 @@
 package ru.otus.sua.L12.webserver;
 
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import ru.otus.sua.L12.dbservice.DBService;
 import ru.otus.sua.L12.entity.AddressDataSet;
@@ -9,23 +8,23 @@ import ru.otus.sua.L12.entity.UserDataSet;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 
 @Slf4j
-class AdminServletHelperService {
+class AdminServletMethods {
 
     private HttpServletRequest request;
-    private Map<String, Object> pageVariables;
+    private Map<String, Object> pageVariables = new HashMap<>();
     private DBService dbService;
 
-    AdminServletHelperService(HttpServletRequest request, Map<String, Object> pageVariables){
+    AdminServletMethods(HttpServletRequest request){
         this.request = request;
-        this.pageVariables = pageVariables;
-        dbService = (DBService) request.getServletContext().getAttribute(WebserverConfiguration.DBSERVICE);
+        dbService = (DBService) request.getServletContext().getAttribute(WebserverConfiguration.DB_SERVICE_CONTEXT_PARAMETER_NAME);
+    }
+
+    Map<String, Object> getTemplateVariables(){
+        return pageVariables;
     }
 
     void setUserNameById() {

@@ -10,7 +10,8 @@ public class JettyServerWrapper {
 
     public JettyServerWrapper(DBService dbService, ServletContextHandler context) {
         server = new Server(WebserverConfiguration.PORT);
-        context.getServletContext().setAttribute(WebserverConfiguration.DBSERVICE, dbService);
+        context.getServletContext().setAttribute(WebserverConfiguration.DB_SERVICE_CONTEXT_PARAMETER_NAME, dbService);
+        context.getServletContext().setAttribute(WebserverConfiguration.TEMPLATE_SERVICE_CONTEXT_PARAMETER_NAME, new TemplateProcessor());
         server.setHandler(context);
     }
 

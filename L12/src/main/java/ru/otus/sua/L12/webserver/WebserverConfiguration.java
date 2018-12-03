@@ -15,7 +15,8 @@ import java.net.URL;
 public class WebserverConfiguration {
 
     //
-    static final String DBSERVICE = "DBService";
+    static final String DB_SERVICE_CONTEXT_PARAMETER_NAME = "DBService";
+    static final String TEMPLATE_SERVICE_CONTEXT_PARAMETER_NAME = "TemplateService";
     static final String DEFAULT_USER_NAME = "anonymous";
     static final String DEFAULT_ADMIN_USER_NAME = "admin";
     static final String LOGIN_SESSION_PARAMETER_NAME = "login";

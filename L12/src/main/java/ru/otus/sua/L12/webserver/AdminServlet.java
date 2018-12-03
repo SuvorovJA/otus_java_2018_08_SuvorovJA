@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
@@ -24,8 +22,7 @@ public class AdminServlet extends HttpServlet {
         if (!authLogin.equals(WebserverConfiguration.DEFAULT_ADMIN_USER_NAME))
             response.sendRedirect(request.getContextPath() + WebserverConfiguration.LOGIN_SERVLET_PATH);
 
-        Map<String, Object> pageVariables = new HashMap<>();
-        AdminServletHelperService helper = new AdminServletHelperService(request, pageVariables);
+        AdminServletMethods helper = new AdminServletMethods(request);
 
         switch (Objects.toString(request.getParameter(TemplateConstants.ADMIN_PAGE_ACTION), "undef")) {
             case (TemplateConstants.ADMIN_PAGE_ACTION_ADDUSER):
@@ -41,7 +38,8 @@ public class AdminServlet extends HttpServlet {
 
         helper.setUserCounter();
 
-        response.getWriter().println(ServletHelper.getPage(TemplateConstants.ADMIN_PAGE_TEMPLATE, authLogin, pageVariables));
+        response.getWriter().println(
+                ServletHelper.getPage(request, TemplateConstants.ADMIN_PAGE_TEMPLATE, authLogin, helper.getTemplateVariables()));
     }
 
 
@@ -49,11 +47,12 @@ public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String authLogin = ServletHelper.readLoginFromSession(request);
         log.info("Attempt get-access to admin page as: {} ", authLogin);
-        Map<String, Object> pageVariables = new HashMap<>();
-        AdminServletHelperService helper = new AdminServletHelperService(request, pageVariables);
+        AdminServletMethods helper = new AdminServletMethods(request);
         if (authLogin.equals(WebserverConfiguration.DEFAULT_ADMIN_USER_NAME)) helper.setUserCounter();
-        response.getWriter().println(ServletHelper.getPage(TemplateConstants.ADMIN_PAGE_TEMPLATE, authLogin, pageVariables));
+        response.getWriter().println(
+                ServletHelper.getPage(request, TemplateConstants.ADMIN_PAGE_TEMPLATE, authLogin, helper.getTemplateVariables()));
     }
+
 
 }
 
