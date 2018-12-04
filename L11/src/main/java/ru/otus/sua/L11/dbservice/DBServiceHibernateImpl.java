@@ -17,7 +17,7 @@ public class DBServiceHibernateImpl implements DBService {
 
     private Session session;
 
-    public DBServiceHibernateImpl(){
+    public DBServiceHibernateImpl() {
         session = HibernateFactorySessionHolder.openSession();
     }
 
@@ -53,17 +53,17 @@ public class DBServiceHibernateImpl implements DBService {
 
     @Override
     public <T extends DataSet> T getByName(String name, Class clazz) throws SQLException {
-        return (T) (new UserDataSetDAO(session,clazz)).findByName(name);
+        return (T) (new UserDataSetDAO(session, clazz)).findByName(name);
     }
 
     @Override
     public <T extends DataSet> void save(T entity) throws SQLException {
-        (new UserDataSetDAO(session,entity.getClass())).create(entity);
+        (new UserDataSetDAO(session, entity.getClass())).create(entity);
     }
 
     @Override
     public <T extends DataSet> T load(long id, Class<T> clazz) throws SQLException {
-        return (T) (new UserDataSetDAO(session,clazz)).read(id);
+        return (T) (new UserDataSetDAO(session, clazz)).read(id);
     }
 
     @Override

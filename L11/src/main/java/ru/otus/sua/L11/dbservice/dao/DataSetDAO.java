@@ -16,7 +16,6 @@ import java.util.function.Supplier;
  * design your application to use a new Hibernate org.hibernate.Session for every
  * database operation. Even though it is used in the following examples, consider
  * session-per-operation an anti-pattern. //TODO make DAO as field in DBServiceImpl
- *
  */
 @Getter
 @Slf4j
