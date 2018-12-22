@@ -44,7 +44,7 @@ public class Launcher {
 
     private static int[] splitAndSort(int[] a, int sorterThreads) throws InterruptedException {
         if (sorterThreads <= 0) throw new IllegalArgumentException("MAX_SORTER_THREADS must be >0");
-        if (sorterThreads == 1) return (new SorterImpl()).sort(a);
+        if (sorterThreads == 1) return SorterFab.getSorter().sort(a);
         Range[] ranges = arraySplitAndCopy(a, sorterThreads);
         threadSort(ranges);
         return mergeSortedArrays(ranges);
@@ -84,7 +84,7 @@ public class Launcher {
         Thread[] threads = new Thread[MAX_SORTER_THREADS];
         int index = 0;
         for (Range range : ranges) {
-            Thread thread = new Thread(() -> (new SorterImpl()).sort(range.getArray()));
+            Thread thread = new Thread(() -> SorterFab.getSorter().sort(range.getArray()));
             thread.setName(range.getName());
             threads[index++] = thread;
             thread.start();
