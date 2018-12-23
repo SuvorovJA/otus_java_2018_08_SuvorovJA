@@ -8,7 +8,7 @@ import java.util.Random;
 @Slf4j
 public class Launcher {
 
-    private final static int ARR_SIZE = Integer.MAX_VALUE/18;
+    private final static int ARR_SIZE = 200000;
     private final static int MAX_SORTER_THREADS = 4;
     private static final int RANDOM_NUMBER_BOUND = 11;
     private static final int RANDOM_NUMBER_ORIGIN = -10;
@@ -19,7 +19,7 @@ public class Launcher {
         printConstants();
         int[] a = new Random().ints(ARR_SIZE, RANDOM_NUMBER_ORIGIN, RANDOM_NUMBER_BOUND).toArray();
         printTailOfArray(a, TAIL_LENGTH);
-        printTailOfArray((new ParallelSorter(MAX_SORTER_THREADS,SorterImpl.class)).sort(a),TAIL_LENGTH);
+        printTailOfArray((new ParallelSorter(MAX_SORTER_THREADS,SorterBubbleImpl.class)).sort(a),TAIL_LENGTH);
 
     }
 

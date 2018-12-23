@@ -13,6 +13,41 @@
 ##### Решение
 
 ``` 
+ARR_SIZE=200000
+MAX_SORTER_THREADS=4
+printing TAIL_LENGTH=22
+randoms from -10 to 10
+
+
+ last 22 elements:
+... -7 3 -3 10 8 -4 -7 -4 7 1 -9 -2 -10 -9 1 -6 -5 -3 5 -1 -2 -2
+
+Split ranges
+ Array length: 200000
+ Threads: 4
+chunk for SortThread1: from=0, to=49999, length=50000
+chunk for SortThread2: from=50000, to=99999, length=50000
+chunk for SortThread3: from=100000, to=149999, length=50000
+chunk for SortThread4: from=150000, to=199999, length=50000
+17:41:11.294 [SortThread3] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:41:11.308 [SortThread1] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:41:11.305 [SortThread2] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:41:11.309 [SortThread4] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:41:22.933 [SortThread2] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:41:23.020 [SortThread4] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:41:23.164 [SortThread3] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:41:23.268 [SortThread1] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:41:23.269 [main] INFO ru.otus.sua.L13.ParallelSorter - End all threads.
+merge 4 arrays to 2 arrays.
+last 2 arrays merge.
+
+ last 22 elements:
+... 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10
+
+```
+
+
+``` 
 ARR_SIZE=119304647
 MAX_SORTER_THREADS=4
 printing TAIL_LENGTH=22
