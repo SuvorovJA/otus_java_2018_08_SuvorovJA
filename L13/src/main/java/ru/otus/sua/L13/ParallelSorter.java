@@ -69,7 +69,9 @@ public class ParallelSorter {
         if (ranges.length == 1) return ranges[0].getArray();
         if (ranges.length == 2) {
             System.out.println("last 2 arrays merge.");
-            return merge(ranges[0].getArray(), ranges[1].getArray());
+            Range range = new Range();
+            merge(range, ranges[0].getArray(), ranges[1].getArray());
+            return range.getArray();
         }
         int sizeNext = ranges.length / 2 + ranges.length % 2;
         System.out.println("merge " + ranges.length + " arrays to " + sizeNext + " arrays.");
@@ -77,19 +79,25 @@ public class ParallelSorter {
         int index = 0;
         for (int i = 1; i < ranges.length; i += 2) {
             rangesNext[index] = new Range();
-            rangesNext[index].setArray(merge(ranges[i - 1].getArray(), ranges[i].getArray()));
+            merge(rangesNext[index],ranges[i - 1].getArray(), ranges[i].getArray());
             index++;
         }
         if (ranges.length % 2 != 0) rangesNext[rangesNext.length - 1] = ranges[ranges.length - 1];
         return mergeSortedArrays(rangesNext);
     }
 
-    private int[] merge(int[] a, int[] b) {
-        int[] answer = new int[a.length + b.length];
-        int i = a.length - 1, j = b.length - 1, k = answer.length;
+    private void garbage(int[] a0, int[] a1) {
+        a0 = null;
+        a1 = null;
+        System.gc();
+    }
+
+    private void merge(Range range, int[] a, int[] b) {
+        range.setArray(new int[a.length + b.length]);
+        int i = a.length - 1, j = b.length - 1, k = range.getArray().length;
         while (k > 0)
-            answer[--k] = (j < 0 || (i >= 0 && a[i] >= b[j])) ? a[i--] : b[j--];
-        return answer;
+            range.getArray()[--k] = (j < 0 || (i >= 0 && a[i] >= b[j])) ? a[i--] : b[j--];
+        garbage(a,b);
     }
 
     private void threadSort(Range[] ranges) throws InterruptedException {

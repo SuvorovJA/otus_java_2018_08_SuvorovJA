@@ -8,10 +8,10 @@ import java.util.Random;
 @Slf4j
 public class Launcher {
 
-    private final static int ARR_SIZE = 15;
+    private final static int ARR_SIZE = Integer.MAX_VALUE/18;
     private final static int MAX_SORTER_THREADS = 4;
-    private static final int RANDOM_NUMBER_BOUND = 14;
-    private static final int RANDOM_NUMBER_ORIGIN = 1;
+    private static final int RANDOM_NUMBER_BOUND = 11;
+    private static final int RANDOM_NUMBER_ORIGIN = -10;
     private static final int TAIL_LENGTH = 22;
 
     public static void main(String[] args) {
