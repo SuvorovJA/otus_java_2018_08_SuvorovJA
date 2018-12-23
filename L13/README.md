@@ -12,6 +12,281 @@
 
 ##### Решение
 
+
+bubble with massive parallel on 2M array
+``` 
+
+ARR_SIZE=2000000
+MAX_SORTER_THREADS=81
+printing TAIL_LENGTH=22
+randoms from -10 to 10
+
+
+ last 22 elements:
+... -3 4 2 -6 -2 2 -5 -4 -9 6 2 -4 0 -6 10 -6 -10 7 5 -1 -10 9
+
+Split ranges
+ Array length: 2000000
+ Threads: 81
+chunk for SortThread1: from=0, to=24691, length=24692
+chunk for SortThread2: from=24692, to=49383, length=24692
+chunk for SortThread3: from=49384, to=74075, length=24692
+chunk for SortThread4: from=74076, to=98767, length=24692
+chunk for SortThread5: from=98768, to=123459, length=24692
+chunk for SortThread6: from=123460, to=148151, length=24692
+chunk for SortThread7: from=148152, to=172843, length=24692
+chunk for SortThread8: from=172844, to=197535, length=24692
+chunk for SortThread9: from=197536, to=222227, length=24692
+chunk for SortThread10: from=222228, to=246919, length=24692
+chunk for SortThread11: from=246920, to=271611, length=24692
+chunk for SortThread12: from=271612, to=296303, length=24692
+chunk for SortThread13: from=296304, to=320995, length=24692
+chunk for SortThread14: from=320996, to=345687, length=24692
+chunk for SortThread15: from=345688, to=370379, length=24692
+chunk for SortThread16: from=370380, to=395071, length=24692
+chunk for SortThread17: from=395072, to=419763, length=24692
+chunk for SortThread18: from=419764, to=444455, length=24692
+chunk for SortThread19: from=444456, to=469147, length=24692
+chunk for SortThread20: from=469148, to=493839, length=24692
+chunk for SortThread21: from=493840, to=518531, length=24692
+chunk for SortThread22: from=518532, to=543223, length=24692
+chunk for SortThread23: from=543224, to=567915, length=24692
+chunk for SortThread24: from=567916, to=592607, length=24692
+chunk for SortThread25: from=592608, to=617299, length=24692
+chunk for SortThread26: from=617300, to=641991, length=24692
+chunk for SortThread27: from=641992, to=666683, length=24692
+chunk for SortThread28: from=666684, to=691375, length=24692
+chunk for SortThread29: from=691376, to=716067, length=24692
+chunk for SortThread30: from=716068, to=740758, length=24691
+chunk for SortThread31: from=740759, to=765449, length=24691
+chunk for SortThread32: from=765450, to=790140, length=24691
+chunk for SortThread33: from=790141, to=814831, length=24691
+chunk for SortThread34: from=814832, to=839522, length=24691
+chunk for SortThread35: from=839523, to=864213, length=24691
+chunk for SortThread36: from=864214, to=888904, length=24691
+chunk for SortThread37: from=888905, to=913595, length=24691
+chunk for SortThread38: from=913596, to=938286, length=24691
+chunk for SortThread39: from=938287, to=962977, length=24691
+chunk for SortThread40: from=962978, to=987668, length=24691
+chunk for SortThread41: from=987669, to=1012359, length=24691
+chunk for SortThread42: from=1012360, to=1037050, length=24691
+chunk for SortThread43: from=1037051, to=1061741, length=24691
+chunk for SortThread44: from=1061742, to=1086432, length=24691
+chunk for SortThread45: from=1086433, to=1111123, length=24691
+chunk for SortThread46: from=1111124, to=1135814, length=24691
+chunk for SortThread47: from=1135815, to=1160505, length=24691
+chunk for SortThread48: from=1160506, to=1185196, length=24691
+chunk for SortThread49: from=1185197, to=1209887, length=24691
+chunk for SortThread50: from=1209888, to=1234578, length=24691
+chunk for SortThread51: from=1234579, to=1259269, length=24691
+chunk for SortThread52: from=1259270, to=1283960, length=24691
+chunk for SortThread53: from=1283961, to=1308651, length=24691
+chunk for SortThread54: from=1308652, to=1333342, length=24691
+chunk for SortThread55: from=1333343, to=1358033, length=24691
+chunk for SortThread56: from=1358034, to=1382724, length=24691
+chunk for SortThread57: from=1382725, to=1407415, length=24691
+chunk for SortThread58: from=1407416, to=1432106, length=24691
+chunk for SortThread59: from=1432107, to=1456797, length=24691
+chunk for SortThread60: from=1456798, to=1481488, length=24691
+chunk for SortThread61: from=1481489, to=1506179, length=24691
+chunk for SortThread62: from=1506180, to=1530870, length=24691
+chunk for SortThread63: from=1530871, to=1555561, length=24691
+chunk for SortThread64: from=1555562, to=1580252, length=24691
+chunk for SortThread65: from=1580253, to=1604943, length=24691
+chunk for SortThread66: from=1604944, to=1629634, length=24691
+chunk for SortThread67: from=1629635, to=1654325, length=24691
+chunk for SortThread68: from=1654326, to=1679016, length=24691
+chunk for SortThread69: from=1679017, to=1703707, length=24691
+chunk for SortThread70: from=1703708, to=1728398, length=24691
+chunk for SortThread71: from=1728399, to=1753089, length=24691
+chunk for SortThread72: from=1753090, to=1777780, length=24691
+chunk for SortThread73: from=1777781, to=1802471, length=24691
+chunk for SortThread74: from=1802472, to=1827162, length=24691
+chunk for SortThread75: from=1827163, to=1851853, length=24691
+chunk for SortThread76: from=1851854, to=1876544, length=24691
+chunk for SortThread77: from=1876545, to=1901235, length=24691
+chunk for SortThread78: from=1901236, to=1925926, length=24691
+chunk for SortThread79: from=1925927, to=1950617, length=24691
+chunk for SortThread80: from=1950618, to=1975308, length=24691
+chunk for SortThread81: from=1975309, to=1999999, length=24691
+17:46:42.842 [SortThread31] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.872 [SortThread2] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.888 [SortThread41] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.870 [SortThread35] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.867 [SortThread39] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.906 [SortThread44] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.842 [SortThread26] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.842 [SortThread30] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.843 [SortThread28] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.914 [SortThread45] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.842 [SortThread32] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.927 [SortThread46] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.935 [SortThread47] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.842 [SortThread33] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.946 [SortThread48] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.842 [SortThread34] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.841 [SortThread1] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.873 [SortThread19] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.955 [SortThread49] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.873 [SortThread15] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.873 [SortThread14] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.873 [SortThread6] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.971 [SortThread50] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.873 [SortThread5] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.873 [SortThread3] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.873 [SortThread29] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.873 [SortThread4] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.873 [SortThread7] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.873 [SortThread9] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.873 [SortThread10] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.873 [SortThread11] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.872 [SortThread36] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.873 [SortThread13] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.872 [SortThread25] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.872 [SortThread16] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.872 [SortThread8] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.872 [SortThread17] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.872 [SortThread18] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.872 [SortThread20] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.872 [SortThread21] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.872 [SortThread22] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.872 [SortThread23] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.872 [SortThread27] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.872 [SortThread24] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.879 [SortThread42] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.873 [SortThread12] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.055 [SortThread51] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.063 [SortThread52] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.087 [SortThread53] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.105 [SortThread54] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.855 [SortThread37] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.143 [SortThread55] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.163 [SortThread56] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:42.867 [SortThread38] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.199 [SortThread57] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.239 [SortThread58] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.267 [SortThread59] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.311 [SortThread60] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.351 [SortThread61] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.386 [SortThread62] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.427 [SortThread63] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.470 [SortThread64] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.503 [SortThread65] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.555 [SortThread66] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.587 [SortThread67] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.643 [SortThread68] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.685 [SortThread69] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.730 [SortThread70] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.771 [SortThread71] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.811 [SortThread72] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.875 [SortThread73] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.908 [SortThread74] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.959 [SortThread75] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:43.995 [SortThread76] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:44.047 [SortThread77] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:44.091 [SortThread78] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:44.139 [SortThread79] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:44.188 [SortThread80] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:44.255 [SortThread40] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:44.257 [SortThread43] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:46:44.573 [SortThread81] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort start.
+17:47:07.372 [SortThread11] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:08.385 [SortThread71] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:08.492 [SortThread14] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:08.639 [SortThread35] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:08.769 [SortThread33] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:09.234 [SortThread10] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:09.337 [SortThread76] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:10.186 [SortThread50] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:11.174 [SortThread30] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:11.653 [SortThread44] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:12.033 [SortThread53] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:12.048 [SortThread54] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:12.056 [SortThread6] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:12.094 [SortThread56] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:12.394 [SortThread24] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:12.545 [SortThread18] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:12.620 [SortThread49] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:12.678 [SortThread39] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:12.816 [SortThread12] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:12.943 [SortThread25] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.060 [SortThread28] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.191 [SortThread78] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.209 [SortThread59] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.212 [SortThread26] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.243 [SortThread23] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.252 [SortThread1] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.332 [SortThread38] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.470 [SortThread13] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.508 [SortThread75] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.521 [SortThread9] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.539 [SortThread36] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.771 [SortThread52] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.781 [SortThread61] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.835 [SortThread17] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.887 [SortThread48] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:13.890 [SortThread63] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.086 [SortThread27] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.135 [SortThread7] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.189 [SortThread46] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.229 [SortThread58] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.236 [SortThread66] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.303 [SortThread43] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.317 [SortThread70] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.334 [SortThread67] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.388 [SortThread69] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.404 [SortThread47] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.431 [SortThread5] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.467 [SortThread34] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.483 [SortThread77] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.587 [SortThread45] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.630 [SortThread16] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.640 [SortThread68] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.641 [SortThread60] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.654 [SortThread40] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.682 [SortThread64] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.684 [SortThread42] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.696 [SortThread3] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.762 [SortThread20] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.777 [SortThread4] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.781 [SortThread8] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.819 [SortThread73] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.839 [SortThread62] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.842 [SortThread32] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.863 [SortThread37] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.909 [SortThread19] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.918 [SortThread72] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.920 [SortThread57] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.976 [SortThread22] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:14.978 [SortThread55] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:15.048 [SortThread15] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:15.066 [SortThread74] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:15.097 [SortThread21] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:15.101 [SortThread80] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:15.131 [SortThread29] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:15.161 [SortThread79] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:15.183 [SortThread51] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:15.232 [SortThread81] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:15.269 [SortThread65] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:15.398 [SortThread31] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:15.450 [SortThread2] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:15.524 [SortThread41] INFO ru.otus.sua.L13.SorterBubbleImpl - Sort end.
+17:47:15.525 [main] INFO ru.otus.sua.L13.ParallelSorter - End all threads.
+merge 81 arrays to 41 arrays.
+merge 41 arrays to 21 arrays.
+merge 21 arrays to 11 arrays.
+merge 11 arrays to 6 arrays.
+merge 6 arrays to 3 arrays.
+merge 3 arrays to 2 arrays.
+last 2 arrays merge.
+
+ last 22 elements:
+... 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10
+
+```
+
+
+bubble in 4 thread on 200K array
 ``` 
 ARR_SIZE=200000
 MAX_SORTER_THREADS=4
@@ -47,6 +322,7 @@ last 2 arrays merge.
 ```
 
 
+all next on Arrays.sort() alg
 ``` 
 ARR_SIZE=119304647
 MAX_SORTER_THREADS=4
