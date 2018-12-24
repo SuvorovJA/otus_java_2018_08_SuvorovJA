@@ -16,7 +16,7 @@ public class ParallelSorter {
         ParallelSorter.sorter = sorter;
     }
 
-    private static Range[] arraySplitAndCopy(int[] a, int sorterThreads) {
+    private static Range[] arraySplit(int[] a, int sorterThreads) {
 
         Range[] ranges = new Range[sorterThreads];
 
@@ -34,19 +34,25 @@ public class ParallelSorter {
                 remainder--;
             }
             endElement += shift;
-            String threadName = "SortThread" + i;
-            System.out.println(String.format("chunk for %s: from=%d, to=%d, length=%d",
-                    threadName, startElement, endElement, endElement - startElement + 1));
+
             ranges[i - 1] = new Range();
-            ranges[i - 1].setName(threadName);
-            ranges[i - 1].setArray(Arrays.copyOfRange(a, startElement, endElement + 1));
+            ranges[i - 1].setName("SortThread" + i);
+            ranges[i - 1].setStart(startElement);
+            ranges[i - 1].setEnd(endElement);
+            ranges[i - 1].setLength(endElement - startElement + 1);
+            System.out.println(String.format("chunk for %s: from=%d, to=%d, length=%d",
+                    ranges[i - 1].getName(),
+                    ranges[i - 1].getStart(),
+                    ranges[i - 1].getEnd(),
+                    ranges[i - 1].getLength()));
+
         }
         return ranges;
     }
 
-    public int[] sort(int[] array) {
+    public int[] sort(int[] a) {
         try {
-            return splitAndSort(array, sorterThreads);
+            return splitAndSort(a, sorterThreads);
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.info("sorting interrupted. return null.");
@@ -56,55 +62,46 @@ public class ParallelSorter {
 
     private int[] splitAndSort(int[] a, int sorterThreads) throws InterruptedException {
         if (sorterThreads <= 0) throw new IllegalArgumentException("MAX_SORTER_THREADS must be >0");
-        if (sorterThreads == 1) return SorterFab.getSorter().sort(a);
-        Range[] ranges = arraySplitAndCopy(a, sorterThreads);
-        threadSort(ranges);
-        return mergeSortedArrays(ranges);
+        if (sorterThreads == 1) return SorterFab.getSorter().sort(a, 0, a.length - 1);
+        Range[] ranges = arraySplit(a, sorterThreads);
+        threadSort(a, ranges);
+        return mergeSortedRanges(a, ranges);
     }
 
-    private int[] mergeSortedArrays(Range[] ranges) {
-
-        // TODO Threadable merging
-
-        if (ranges.length == 1) return ranges[0].getArray();
-        if (ranges.length == 2) {
-            System.out.println("last 2 arrays merge.");
-            Range range = new Range();
-            merge(range, ranges[0].getArray(), ranges[1].getArray());
-            return range.getArray();
-        }
-        int sizeNext = ranges.length / 2 + ranges.length % 2;
-        System.out.println("merge " + ranges.length + " arrays to " + sizeNext + " arrays.");
-        Range[] rangesNext = new Range[sizeNext];
-        int index = 0;
-        for (int i = 1; i < ranges.length; i += 2) {
-            rangesNext[index] = new Range();
-            merge(rangesNext[index], ranges[i - 1].getArray(), ranges[i].getArray());
-            index++;
-        }
-        if (ranges.length % 2 != 0) rangesNext[rangesNext.length - 1] = ranges[ranges.length - 1];
-        return mergeSortedArrays(rangesNext);
+    private int[] mergeSortedRanges(int[] a, Range[] ranges) {
+        if (ranges.length == 1) return a;
+        System.out.print("merge 2 ranges from " + ranges.length);
+        Range preLast = ranges[ranges.length - 2];
+        Range last = ranges[ranges.length - 1];
+        System.out.println(" [" + preLast.getStart() + "," + preLast.getEnd() +
+                "] and [" + last.getStart() + "," + last.getEnd() + "]");
+        merge(a, preLast, last);
+        preLast.setEnd(last.getEnd());
+        preLast.setLength(preLast.getLength() + last.getLength());
+        return mergeSortedRanges(a, Arrays.copyOf(ranges, ranges.length - 1));
     }
 
-    private void garbage(int[] a0, int[] a1) {
-        a0 = null;
-        a1 = null;
-        System.gc();
-    }
-
-    private void merge(Range range, int[] a, int[] b) {
-        range.setArray(new int[a.length + b.length]);
-        int i = a.length - 1, j = b.length - 1, k = range.getArray().length;
+    private void merge(int[] a, Range range1, Range range2) {
+        // TODO check and swap. range2 MUST be upper then range1
+        int mergedSize = range1.getLength() + range2.getLength();
+        int[] merged = (new int[mergedSize]);
+        int i = range1.getEnd(), j = range2.getEnd(), k = merged.length;
         while (k > 0)
-            range.getArray()[--k] = (j < 0 || (i >= 0 && a[i] >= b[j])) ? a[i--] : b[j--];
-        garbage(a, b);
+            merged[--k] = (j < range2.getStart() || (i >= range1.getStart() && a[i] >= a[j])) ? a[i--] : a[j--];
+        System.arraycopy(merged,0,a,range1.getStart(),mergedSize);
     }
 
-    private void threadSort(Range[] ranges) throws InterruptedException {
+    private synchronized void swap(int[] a, int i, int j) {
+        int store = a[i];
+        a[i] = a[j];
+        a[j] = store;
+    }
+
+    private void threadSort(int[] a, Range[] ranges) throws InterruptedException {
         Thread[] threads = new Thread[sorterThreads];
         int index = 0;
         for (Range range : ranges) {
-            Thread thread = new Thread(() -> SorterFab.getSorter().sort(range.getArray()));
+            Thread thread = new Thread(() -> SorterFab.getSorter().sort(a, range.getStart(), range.getEnd()));
             thread.setName(range.getName());
             threads[index++] = thread;
             thread.start();
@@ -117,8 +114,10 @@ public class ParallelSorter {
 
     @Data
     private static class Range {
+        private int start;
+        private int end;
+        private int length;
         private String name;
-        private int[] array;
     }
 
 

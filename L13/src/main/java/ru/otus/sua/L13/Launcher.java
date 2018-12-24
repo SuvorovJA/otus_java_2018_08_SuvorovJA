@@ -2,16 +2,16 @@ package ru.otus.sua.L13;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 @Slf4j
 public class Launcher {
 
-    private final static int ARR_SIZE = 2000000;
-    private final static int MAX_SORTER_THREADS = 81;
+    private final static int ARR_SIZE = Integer.MAX_VALUE / 9;
+    private final static int MAX_SORTER_THREADS = 44;
     private static final int RANDOM_NUMBER_BOUND = 11;
-    private static final int RANDOM_NUMBER_ORIGIN = -10;
+    private static final int RANDOM_NUMBER_ORIGIN = 0;
     private static final int TAIL_LENGTH = 22;
 
     public static void main(String[] args) {
@@ -19,7 +19,7 @@ public class Launcher {
         printConstants();
         int[] a = new Random().ints(ARR_SIZE, RANDOM_NUMBER_ORIGIN, RANDOM_NUMBER_BOUND).toArray();
         printTailOfArray(a, TAIL_LENGTH);
-        printTailOfArray((new ParallelSorter(MAX_SORTER_THREADS,new SorterBubbleImpl())).sort(a),TAIL_LENGTH);
+        printTailOfArray((new ParallelSorter(MAX_SORTER_THREADS, new SorterImpl())).sort(a), TAIL_LENGTH);
 
     }
 
@@ -37,6 +37,7 @@ public class Launcher {
         System.out.println("\n last " + tailLength + " elements:");
         System.out.print("...");
         for (int i = a.length - tailLength; i < a.length; i++) System.out.print(" " + a[i]);
+        System.out.println("(sum=" + IntStream.of(a).asLongStream().sum() + ")");
         System.out.println("\n");
     }
 

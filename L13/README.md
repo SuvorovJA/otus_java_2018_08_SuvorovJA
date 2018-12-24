@@ -11,7 +11,44 @@
 
 
 ##### Решение
+inplace sort (growed max arrsize x2).
+on massive parallel, is very poor(slow) single threading merging stage.
+``` 
+ARR_SIZE=238609294
+MAX_SORTER_THREADS=4
+printing TAIL_LENGTH=22
+randoms from 0 to 10
 
+
+ last 22 elements:
+... 7 6 9 0 5 2 1 6 1 0 0 1 7 5 2 5 3 7 8 10 5 5(sum=1193027170)
+
+
+Split ranges
+ Array length: 238609294
+ Threads: 4
+chunk for SortThread1: from=0, to=59652323, length=59652324
+chunk for SortThread2: from=59652324, to=119304647, length=59652324
+chunk for SortThread3: from=119304648, to=178956970, length=59652323
+chunk for SortThread4: from=178956971, to=238609293, length=59652323
+11:42:03.391 [SortThread1] INFO ru.otus.sua.L13.SorterImpl - Sort start.[0,59652323]
+11:42:03.391 [SortThread4] INFO ru.otus.sua.L13.SorterImpl - Sort start.[178956971,238609293]
+11:42:03.391 [SortThread3] INFO ru.otus.sua.L13.SorterImpl - Sort start.[119304648,178956970]
+11:42:03.391 [SortThread2] INFO ru.otus.sua.L13.SorterImpl - Sort start.[59652324,119304647]
+11:42:05.334 [SortThread3] INFO ru.otus.sua.L13.SorterImpl - Sort end.
+11:42:05.385 [SortThread2] INFO ru.otus.sua.L13.SorterImpl - Sort end.
+11:42:05.577 [SortThread4] INFO ru.otus.sua.L13.SorterImpl - Sort end.
+11:42:05.591 [SortThread1] INFO ru.otus.sua.L13.SorterImpl - Sort end.
+11:42:05.591 [main] INFO ru.otus.sua.L13.ParallelSorter - End all threads.
+merge 2 ranges from 4 [119304648,178956970] and [178956971,238609293]
+merge 2 ranges from 3 [59652324,119304647] and [119304648,238609293]
+merge 2 ranges from 2 [0,59652323] and [59652324,238609293]
+
+ last 22 elements:
+... 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10(sum=1193027170)
+
+
+```
 
 bubble with massive parallel on 2M array
 ``` 
