@@ -19,7 +19,7 @@ public class Launcher {
         printConstants();
         int[] a = new Random().ints(ARR_SIZE, RANDOM_NUMBER_ORIGIN, RANDOM_NUMBER_BOUND).toArray();
         printTailOfArray(a, TAIL_LENGTH);
-        printTailOfArray((new ParallelSorter(MAX_SORTER_THREADS,SorterBubbleImpl.class)).sort(a),TAIL_LENGTH);
+        printTailOfArray((new ParallelSorter(MAX_SORTER_THREADS,new SorterBubbleImpl())).sort(a),TAIL_LENGTH);
 
     }
 

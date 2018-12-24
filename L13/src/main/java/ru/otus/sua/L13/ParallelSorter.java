@@ -3,20 +3,46 @@ package ru.otus.sua.L13;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 @Slf4j
 public class ParallelSorter {
 
-    private static Class<? extends Sorter> sorterClass;
+    private static Sorter sorter;
     private final int sorterThreads;
 
-    public ParallelSorter(int sorterThreads, Class<? extends Sorter> sorterClass) {
+    public ParallelSorter(int sorterThreads, Sorter sorter) {
         this.sorterThreads = sorterThreads;
-        ParallelSorter.sorterClass = sorterClass;
+        ParallelSorter.sorter = sorter;
     }
 
+    private static Range[] arraySplitAndCopy(int[] a, int sorterThreads) {
+
+        Range[] ranges = new Range[sorterThreads];
+
+        int chunkSize = a.length / sorterThreads;
+        int remainder = a.length % sorterThreads;
+        int shift = 0;
+
+        System.out.println("Split ranges\n Array length: " + a.length + "\n Threads: " + sorterThreads);
+        for (int i = 1; i <= sorterThreads; i++) {
+            int startElement = (i - 1) * chunkSize;
+            int endElement = startElement + chunkSize - 1;
+            startElement += shift;
+            if (remainder > 0) {
+                shift++;
+                remainder--;
+            }
+            endElement += shift;
+            String threadName = "SortThread" + i;
+            System.out.println(String.format("chunk for %s: from=%d, to=%d, length=%d",
+                    threadName, startElement, endElement, endElement - startElement + 1));
+            ranges[i - 1] = new Range();
+            ranges[i - 1].setName(threadName);
+            ranges[i - 1].setArray(Arrays.copyOfRange(a, startElement, endElement + 1));
+        }
+        return ranges;
+    }
 
     public int[] sort(int[] array) {
         try {
@@ -36,32 +62,6 @@ public class ParallelSorter {
         return mergeSortedArrays(ranges);
     }
 
-    private static Range[] arraySplitAndCopy(int[] a, int sorterThreads) {
-
-        Range[] ranges = new Range[sorterThreads];
-
-        int chunkSize = a.length / sorterThreads;
-        int remainder = a.length % sorterThreads;
-        int shift = 0;
-
-        System.out.println("Split ranges\n Array length: " + a.length + "\n Threads: " + sorterThreads);
-        for (int i = 1; i <= sorterThreads; i++) {
-            int startElement = (i - 1) * chunkSize;
-            int endElement = startElement + chunkSize - 1;
-            startElement += shift;
-            if (remainder > 0) { shift++;remainder--; }
-            endElement += shift;
-            String threadName = "SortThread" + i;
-            System.out.println(String.format("chunk for %s: from=%d, to=%d, length=%d",
-                    threadName, startElement, endElement, endElement - startElement + 1));
-            ranges[i - 1] = new Range();
-            ranges[i - 1].setName(threadName);
-            ranges[i - 1].setArray(Arrays.copyOfRange(a, startElement, endElement + 1));
-        }
-        return ranges;
-    }
-
-
     private int[] mergeSortedArrays(Range[] ranges) {
 
         // TODO Threadable merging
@@ -79,7 +79,7 @@ public class ParallelSorter {
         int index = 0;
         for (int i = 1; i < ranges.length; i += 2) {
             rangesNext[index] = new Range();
-            merge(rangesNext[index],ranges[i - 1].getArray(), ranges[i].getArray());
+            merge(rangesNext[index], ranges[i - 1].getArray(), ranges[i].getArray());
             index++;
         }
         if (ranges.length % 2 != 0) rangesNext[rangesNext.length - 1] = ranges[ranges.length - 1];
@@ -97,7 +97,7 @@ public class ParallelSorter {
         int i = a.length - 1, j = b.length - 1, k = range.getArray().length;
         while (k > 0)
             range.getArray()[--k] = (j < 0 || (i >= 0 && a[i] >= b[j])) ? a[i--] : b[j--];
-        garbage(a,b);
+        garbage(a, b);
     }
 
     private void threadSort(Range[] ranges) throws InterruptedException {
@@ -124,16 +124,7 @@ public class ParallelSorter {
 
     public static class SorterFab {
         static Sorter getSorter() {
-            try {
-                return sorterClass.getDeclaredConstructor().newInstance();
-            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                e.printStackTrace();
-                return arr -> {
-                    log.info("generate default sorter");
-                    Arrays.parallelSort(arr);
-                    return arr;
-                };
-            }
+            return sorter;
         }
     }
 
