@@ -1,8 +1,11 @@
 package ru.otus.sua.L14.webserver;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import ru.otus.sua.L14.dbservice.DBService;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,22 +17,32 @@ import java.io.IOException;
 @WebServlet(name = "AdminServlet")
 public class AdminServlet extends HttpServlet {
 
+    private TemplateProcessor templateProcessor;
+    private DBService dbService;
+
+        @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        ApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
+        templateProcessor = context.getBean("templateProcessor",TemplateProcessor.class);
+        dbService = context.getBean("dbService",DBService.class);
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String authLogin = ServletHelper.readLoginFromSession(request);
         log.info("Attempt post-access to admin page as: {} ", authLogin);
-        if (!authLogin.equals(WebserverConfiguration.DEFAULT_ADMIN_USER_NAME))
-            response.sendRedirect(request.getContextPath() + WebserverConfiguration.LOGIN_SERVLET_PATH);
+        if (!authLogin.equals(WebserverConstants.DEFAULT_ADMIN_USER_NAME))
+            response.sendRedirect(request.getContextPath() + WebserverConstants.LOGIN_SERVLET_PATH);
 
-        DBService dbService = (DBService) request.getServletContext().getAttribute(WebserverConfiguration.DB_SERVICE_CONTEXT_PARAMETER_NAME);
         AdminServletAction action = new AdminServletAction(dbService, request);
         action.action(request.getParameter(TemplateConstants.ADMIN_PAGE_ACTION));
         action.setUserCounter();
 
         ServletHelper.setOK(response);
         response.getWriter().println(
-                TemplateProcessor.getPage(TemplateConstants.ADMIN_PAGE_TEMPLATE, authLogin, action.getTemplateVariables()));
+                templateProcessor.getPage(TemplateConstants.ADMIN_PAGE_TEMPLATE, authLogin, action.getTemplateVariables()));
     }
 
 
@@ -38,13 +51,12 @@ public class AdminServlet extends HttpServlet {
         String authLogin = ServletHelper.readLoginFromSession(request);
         log.info("Attempt get-access to admin page as: {} ", authLogin);
 
-        DBService dbService = (DBService) request.getServletContext().getAttribute(WebserverConfiguration.DB_SERVICE_CONTEXT_PARAMETER_NAME);
         AdminServletAction action = new AdminServletAction(dbService, request);
-        if (authLogin.equals(WebserverConfiguration.DEFAULT_ADMIN_USER_NAME)) action.setUserCounter();
+        if (authLogin.equals(WebserverConstants.DEFAULT_ADMIN_USER_NAME)) action.setUserCounter();
 
         ServletHelper.setOK(response);
         response.getWriter().println(
-                TemplateProcessor.getPage(TemplateConstants.ADMIN_PAGE_TEMPLATE, authLogin, action.getTemplateVariables()));
+                templateProcessor.getPage(TemplateConstants.ADMIN_PAGE_TEMPLATE, authLogin, action.getTemplateVariables()));
     }
 
 }

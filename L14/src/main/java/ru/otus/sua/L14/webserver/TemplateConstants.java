@@ -26,5 +26,4 @@ class TemplateConstants {
     //
     static final String ADMIN_PAGE_TEMPLATE = "admin.html";
     static final String LOGIN_PAGE_TEMPLATE = "login.html";
-    static final String HTML_TEMPLATES_DIR = "web/templates";
 }

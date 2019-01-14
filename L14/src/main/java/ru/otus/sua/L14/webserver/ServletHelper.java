@@ -13,15 +13,15 @@ class ServletHelper {
     static String readLoginFromSession(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String login = Objects.toString(
-                session.getAttribute(WebserverConfiguration.LOGIN_SESSION_PARAMETER_NAME),
-                WebserverConfiguration.DEFAULT_USER_NAME);
+                session.getAttribute(WebserverConstants.LOGIN_SESSION_PARAMETER_NAME),
+                WebserverConstants.DEFAULT_USER_NAME);
         log.info("Logged in session: {} as: {}", session.getId(), login);
         return login;
     }
 
     static void saveLoginToSession(HttpServletRequest request, String requestLogin) {
         HttpSession session = request.getSession();
-        session.setAttribute(WebserverConfiguration.LOGIN_SESSION_PARAMETER_NAME, requestLogin);
+        session.setAttribute(WebserverConstants.LOGIN_SESSION_PARAMETER_NAME, requestLogin);
         log.info("New logged in as: {}, to session: {}", requestLogin, session.getId());
     }
 

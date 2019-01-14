@@ -82,4 +82,6 @@ public class DBServiceHibernateImpl implements DBService {
         session.close();
         HibernateFactorySessionHolder.shutdown();
     }
+
+
 }

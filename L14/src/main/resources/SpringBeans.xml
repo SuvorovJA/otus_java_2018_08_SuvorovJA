@@ -1,0 +1,19 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="dbService" class="ru.otus.sua.L14.dbservice.DBServiceHibernateImpl" destroy-method="close"/>
+
+    <!--Freemarker Templates Loader Configuration-->
+    <bean id="freeMarkerConfigurationFactory"
+          class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
+        <property name="templateLoaderPath" value="/WEB-INF/classes/templates"/>
+        <property name="preferFileSystemAccess" value="true"/>
+    </bean>
+
+    <bean id="templateProcessor" class="ru.otus.sua.L14.webserver.TemplateProcessor">
+        <property name="configuration" ref="freeMarkerConfigurationFactory"/>
+    </bean>
+
+</beans>

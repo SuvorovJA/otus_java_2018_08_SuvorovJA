@@ -1,6 +1,7 @@
 package ru.otus.sua.L14.webserver;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.otus.sua.L14.dbservice.DBService;
 import ru.otus.sua.L14.entity.AddressDataSet;
 import ru.otus.sua.L14.entity.PhoneDataSet;
