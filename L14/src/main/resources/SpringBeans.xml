@@ -3,7 +3,17 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="dbService" class="ru.otus.sua.L14.dbservice.DBServiceHibernateImpl" destroy-method="close"/>
+    <bean id="dbServiceNonCachedNotUsedBean" class="ru.otus.sua.L14.dbservice.DBServiceHibernateImpl"
+          destroy-method="close"/>
+
+    <bean id="cacheDataSet" class="ru.otus.sua.L14.dbservice.CacheDataSetBean"
+
+          init-method="init"/><!--scope="prototype" -->
+
+    <bean id="dbService" class="ru.otus.sua.L14.dbservice.CachedDBServiceHibernateImpl"
+          destroy-method="close" init-method="init">
+        <property name="cacheDataSetBean" ref="cacheDataSet"/>
+    </bean>
 
     <!--Freemarker Templates Loader Configuration-->
     <bean id="freeMarkerConfigurationFactory"

@@ -16,6 +16,102 @@
 
 ##### Решение
 
+cache example
+``` 
+
+21:49:31.006 [http-nio-8080-exec-26] INFO  r.o.s.L.webserver.AdminServletAction - Created new user: UserDataSet(super=DataSet(id=1), name=adminadmin, age=0, phones=[PhoneDataSet(super=DataSet(id=1), phone=)], address=AddressDataSet(super=DataSet(id=1), street=))
+Hibernate: select count(userdatase0_.id) as col_0_0_ from users userdatase0_
+21:49:31.007 [http-nio-8080-exec-26] INFO  r.o.s.L.webserver.AdminServletAction - In database 1 users
+21:49:35.757 [http-nio-8080-exec-25] INFO  r.o.sua.L14.webserver.ServletHelper - Logged in session: F66A771B7DACE77EE4E484B5ABB1EDE2 as: admin
+21:49:35.757 [http-nio-8080-exec-25] INFO  r.o.sua.L14.webserver.AdminServlet - Attempt post-access to admin page as: admin 
+Hibernate: insert into users (id, age, name, DTYPE) values (null, ?, ?, 'UserDataSet')
+Hibernate: insert into phones (id, phone, user_id) values (null, ?, ?)
+Hibernate: insert into address (id, street, user_id) values (null, ?, ?)
+21:49:35.765 [http-nio-8080-exec-25] INFO  r.o.s.L.webserver.AdminServletAction - Created new user: UserDataSet(super=DataSet(id=2), name=eeeeeeeeee, age=0, phones=[PhoneDataSet(super=DataSet(id=2), phone=)], address=AddressDataSet(super=DataSet(id=2), street=))
+Hibernate: select count(userdatase0_.id) as col_0_0_ from users userdatase0_
+21:49:35.765 [http-nio-8080-exec-25] INFO  r.o.s.L.webserver.AdminServletAction - In database 2 users
+21:49:42.064 [http-nio-8080-exec-27] INFO  r.o.sua.L14.webserver.ServletHelper - Logged in session: F66A771B7DACE77EE4E484B5ABB1EDE2 as: admin
+21:49:42.064 [http-nio-8080-exec-27] INFO  r.o.sua.L14.webserver.AdminServlet - Attempt post-access to admin page as: admin 
+21:49:42.072 [http-nio-8080-exec-27] INFO  r.o.s.L.d.CachedDBServiceHibernateImpl - Cache size: 1, hits: 0, miss: 1
+21:49:42.072 [http-nio-8080-exec-27] INFO  r.o.s.L.webserver.AdminServletAction - Found user name: adminadmin for id: 1
+Hibernate: select count(userdatase0_.id) as col_0_0_ from users userdatase0_
+21:49:42.073 [http-nio-8080-exec-27] INFO  r.o.s.L.webserver.AdminServletAction - In database 2 users
+21:49:43.692 [http-nio-8080-exec-22] INFO  r.o.sua.L14.webserver.ServletHelper - Logged in session: F66A771B7DACE77EE4E484B5ABB1EDE2 as: admin
+21:49:43.692 [http-nio-8080-exec-22] INFO  r.o.sua.L14.webserver.AdminServlet - Attempt post-access to admin page as: admin 
+21:49:43.692 [http-nio-8080-exec-22] INFO  r.o.s.L.d.CachedDBServiceHibernateImpl - Cache size: 1, hits: 1, miss: 1
+21:49:43.692 [http-nio-8080-exec-22] INFO  r.o.s.L.webserver.AdminServletAction - Found user name: adminadmin for id: 1
+Hibernate: select count(userdatase0_.id) as col_0_0_ from users userdatase0_
+21:49:43.693 [http-nio-8080-exec-22] INFO  r.o.s.L.webserver.AdminServletAction - In database 2 users
+21:49:51.749 [http-nio-8080-exec-31] INFO  r.o.sua.L14.webserver.ServletHelper - Logged in session: F66A771B7DACE77EE4E484B5ABB1EDE2 as: admin
+21:49:51.749 [http-nio-8080-exec-31] INFO  r.o.sua.L14.webserver.AdminServlet - Attempt post-access to admin page as: admin 
+21:49:51.751 [http-nio-8080-exec-31] INFO  r.o.s.L.d.CachedDBServiceHibernateImpl - Cache size: 1, hits: 1, miss: 2
+21:49:51.751 [http-nio-8080-exec-31] INFO  r.o.s.L.webserver.AdminServletAction - Found user name: adminadmin for id: 1
+Hibernate: select count(userdatase0_.id) as col_0_0_ from users userdatase0_
+21:49:51.752 [http-nio-8080-exec-31] INFO  r.o.s.L.webserver.AdminServletAction - In database 2 users
+21:49:54.095 [http-nio-8080-exec-32] INFO  r.o.sua.L14.webserver.ServletHelper - Logged in session: F66A771B7DACE77EE4E484B5ABB1EDE2 as: admin
+21:49:54.095 [http-nio-8080-exec-32] INFO  r.o.sua.L14.webserver.AdminServlet - Attempt post-access to admin page as: admin 
+21:49:54.096 [http-nio-8080-exec-32] INFO  r.o.s.L.d.CachedDBServiceHibernateImpl - Cache size: 1, hits: 1, miss: 3
+21:49:54.097 [http-nio-8080-exec-32] INFO  r.o.s.L.webserver.AdminServletAction - Found user name: adminadmin for id: 1
+Hibernate: select count(userdatase0_.id) as col_0_0_ from users userdatase0_
+21:49:54.097 [http-nio-8080-exec-32] INFO  r.o.s.L.webserver.AdminServletAction - In database 2 users
+21:49:55.116 [http-nio-8080-exec-33] INFO  r.o.sua.L14.webserver.ServletHelper - Logged in session: F66A771B7DACE77EE4E484B5ABB1EDE2 as: admin
+21:49:55.116 [http-nio-8080-exec-33] INFO  r.o.sua.L14.webserver.AdminServlet - Attempt post-access to admin page as: admin 
+21:49:55.116 [http-nio-8080-exec-33] INFO  r.o.s.L.d.CachedDBServiceHibernateImpl - Cache size: 1, hits: 2, miss: 3
+21:49:55.116 [http-nio-8080-exec-33] INFO  r.o.s.L.webserver.AdminServletAction - Found user name: adminadmin for id: 1
+Hibernate: select count(userdatase0_.id) as col_0_0_ from users userdatase0_
+21:49:55.117 [http-nio-8080-exec-33] INFO  r.o.s.L.webserver.AdminServletAction - In database 2 users
+21:49:56.017 [http-nio-8080-exec-34] INFO  r.o.sua.L14.webserver.ServletHelper - Logged in session: F66A771B7DACE77EE4E484B5ABB1EDE2 as: admin
+21:49:56.017 [http-nio-8080-exec-34] INFO  r.o.sua.L14.webserver.AdminServlet - Attempt post-access to admin page as: admin 
+21:49:56.017 [http-nio-8080-exec-34] INFO  r.o.s.L.d.CachedDBServiceHibernateImpl - Cache size: 1, hits: 3, miss: 3
+21:49:56.017 [http-nio-8080-exec-34] INFO  r.o.s.L.webserver.AdminServletAction - Found user name: adminadmin for id: 1
+Hibernate: select count(userdatase0_.id) as col_0_0_ from users userdatase0_
+21:49:56.018 [http-nio-8080-exec-34] INFO  r.o.s.L.webserver.AdminServletAction - In database 2 users
+21:49:58.820 [http-nio-8080-exec-26] INFO  r.o.sua.L14.webserver.ServletHelper - Logged in session: F66A771B7DACE77EE4E484B5ABB1EDE2 as: admin
+21:49:58.820 [http-nio-8080-exec-26] INFO  r.o.sua.L14.webserver.AdminServlet - Attempt post-access to admin page as: admin 
+21:49:58.822 [http-nio-8080-exec-26] INFO  r.o.s.L.d.CachedDBServiceHibernateImpl - Cache size: 1, hits: 3, miss: 4
+21:49:58.822 [http-nio-8080-exec-26] INFO  r.o.s.L.webserver.AdminServletAction - Found user name: eeeeeeeeee for id: 2
+Hibernate: select count(userdatase0_.id) as col_0_0_ from users userdatase0_
+21:49:58.823 [http-nio-8080-exec-26] INFO  r.o.s.L.webserver.AdminServletAction - In database 2 users
+21:49:59.864 [http-nio-8080-exec-35] INFO  r.o.sua.L14.webserver.ServletHelper - Logged in session: F66A771B7DACE77EE4E484B5ABB1EDE2 as: admin
+21:49:59.865 [http-nio-8080-exec-35] INFO  r.o.sua.L14.webserver.AdminServlet - Attempt post-access to admin page as: admin 
+21:49:59.865 [http-nio-8080-exec-35] INFO  r.o.s.L.d.CachedDBServiceHibernateImpl - Cache size: 1, hits: 4, miss: 4
+21:49:59.865 [http-nio-8080-exec-35] INFO  r.o.s.L.webserver.AdminServletAction - Found user name: eeeeeeeeee for id: 2
+Hibernate: select count(userdatase0_.id) as col_0_0_ from users userdatase0_
+21:49:59.866 [http-nio-8080-exec-35] INFO  r.o.s.L.webserver.AdminServletAction - In database 2 users
+21:50:00.910 [http-nio-8080-exec-36] INFO  r.o.sua.L14.webserver.ServletHelper - Logged in session: F66A771B7DACE77EE4E484B5ABB1EDE2 as: admin
+21:50:00.911 [http-nio-8080-exec-36] INFO  r.o.sua.L14.webserver.AdminServlet - Attempt post-access to admin page as: admin 
+21:50:00.912 [http-nio-8080-exec-36] INFO  r.o.s.L.d.CachedDBServiceHibernateImpl - Cache size: 1, hits: 4, miss: 5
+21:50:00.912 [http-nio-8080-exec-36] INFO  r.o.s.L.webserver.AdminServletAction - Found user name: eeeeeeeeee for id: 2
+Hibernate: select count(userdatase0_.id) as col_0_0_ from users userdatase0_
+21:50:00.913 [http-nio-8080-exec-36] INFO  r.o.s.L.webserver.AdminServletAction - In database 2 users
+21:50:02.739 [http-nio-8080-exec-27] INFO  r.o.sua.L14.webserver.ServletHelper - Logged in session: F66A771B7DACE77EE4E484B5ABB1EDE2 as: admin
+21:50:02.739 [http-nio-8080-exec-27] INFO  r.o.sua.L14.webserver.AdminServlet - Attempt post-access to admin page as: admin 
+21:50:02.739 [http-nio-8080-exec-27] INFO  r.o.s.L.d.CachedDBServiceHibernateImpl - Cache size: 1, hits: 5, miss: 5
+21:50:02.739 [http-nio-8080-exec-27] INFO  r.o.s.L.webserver.AdminServletAction - Found user name: eeeeeeeeee for id: 2
+Hibernate: select count(userdatase0_.id) as col_0_0_ from users userdatase0_
+21:50:02.740 [http-nio-8080-exec-27] INFO  r.o.s.L.webserver.AdminServletAction - In database 2 users
+21:50:14.536 [http-nio-8080-exec-31] INFO  r.o.sua.L14.webserver.ServletHelper - Logged in session: F66A771B7DACE77EE4E484B5ABB1EDE2 as: admin
+21:50:14.537 [http-nio-8080-exec-31] INFO  r.o.sua.L14.webserver.AdminServlet - Attempt post-access to admin page as: admin 
+21:50:14.537 [http-nio-8080-exec-31] INFO  r.o.s.L.d.CachedDBServiceHibernateImpl - Cache size: 1, hits: 5, miss: 6
+21:50:14.538 [http-nio-8080-exec-31] INFO  r.o.s.L.webserver.AdminServletAction - Found user name: adminadmin for id: 1
+Hibernate: select count(userdatase0_.id) as col_0_0_ from users userdatase0_
+21:50:14.538 [http-nio-8080-exec-31] INFO  r.o.s.L.webserver.AdminServletAction - In database 2 users
+21:50:15.452 [http-nio-8080-exec-38] INFO  r.o.sua.L14.webserver.ServletHelper - Logged in session: F66A771B7DACE77EE4E484B5ABB1EDE2 as: admin
+21:50:15.453 [http-nio-8080-exec-38] INFO  r.o.sua.L14.webserver.AdminServlet - Attempt post-access to admin page as: admin 
+21:50:15.454 [http-nio-8080-exec-38] INFO  r.o.s.L.d.CachedDBServiceHibernateImpl - Cache size: 2, hits: 5, miss: 7
+21:50:15.454 [http-nio-8080-exec-38] INFO  r.o.s.L.webserver.AdminServletAction - Found user name: eeeeeeeeee for id: 2
+Hibernate: select count(userdatase0_.id) as col_0_0_ from users userdatase0_
+21:50:15.455 [http-nio-8080-exec-38] INFO  r.o.s.L.webserver.AdminServletAction - In database 2 users
+21:50:16.364 [http-nio-8080-exec-32] INFO  r.o.sua.L14.webserver.ServletHelper - Logged in session: F66A771B7DACE77EE4E484B5ABB1EDE2 as: admin
+21:50:16.364 [http-nio-8080-exec-32] INFO  r.o.sua.L14.webserver.AdminServlet - Attempt post-access to admin page as: admin 
+21:50:16.364 [http-nio-8080-exec-32] INFO  r.o.s.L.d.CachedDBServiceHibernateImpl - Cache size: 2, hits: 6, miss: 7
+21:50:16.364 [http-nio-8080-exec-32] INFO  r.o.s.L.webserver.AdminServletAction - Found user name: adminadmin for id: 1
+Hibernate: select count(userdatase0_.id) as col_0_0_ from users userdatase0_
+21:50:16.365 [http-nio-8080-exec-32] INFO  r.o.s.L.webserver.AdminServletAction - In database 2 users
+
+```
+
+
 
 'Bean' version log on Tomcat9 
 ``` 

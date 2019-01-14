@@ -92,6 +92,14 @@
             <!-- <scope>test</scope> -->
         </dependency>
 
+        <!--CACHE-->
+        <dependency>
+            <groupId>ru.otus.sua</groupId>
+            <artifactId>L06</artifactId>
+            <version>2018-08</version>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
 
         <dependency>
             <groupId>org.freemarker</groupId>
