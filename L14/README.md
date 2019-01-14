@@ -8,7 +8,7 @@
 
 - [x] Создавать  DBService как Spring beans, передавать (inject) их в сервлеты.
   - [x] freemarker templateProcessor
-  - [ ] L06 кэш 
+  - [x] L06 кэш 
 
 - [x] Запустить веб приложение во внешнем веб сервере. 
 
