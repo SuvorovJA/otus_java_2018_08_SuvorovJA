@@ -1,7 +1,6 @@
 package ru.otus.sua.L14.webserver;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import ru.otus.sua.L14.dbservice.DBService;
 import ru.otus.sua.L14.entity.AddressDataSet;
 import ru.otus.sua.L14.entity.PhoneDataSet;
@@ -61,7 +60,7 @@ class AdminServletAction {
             id = Integer.parseInt(userId);
         } catch (NumberFormatException e) {
             log.warn("Incorrect Id number format");
-            pageVariables.put(TemplateConstants.FOUND_USER_NAME_TEMPLATE_VARIABLE_NAME, "<strong>Incorrect Id number format</strong>");
+            pageVariables.put(TemplateConstants.FOUND_USER_NAME_TEMPLATE_VARIABLE_NAME, "Incorrect Id number format");
             return;
         }
 
@@ -71,7 +70,7 @@ class AdminServletAction {
             pageVariables.put(TemplateConstants.FOUND_USER_NAME_TEMPLATE_VARIABLE_NAME, name);
         } catch (SQLException | NullPointerException e) {
             log.warn("Can't find user by id: {}", id);
-            pageVariables.put(TemplateConstants.FOUND_USER_NAME_TEMPLATE_VARIABLE_NAME, "<strong>Can't find user by id: " + id + "</strong>");
+            pageVariables.put(TemplateConstants.FOUND_USER_NAME_TEMPLATE_VARIABLE_NAME, "Can't find user by id: " + id + "");
         }
     }
 
@@ -82,13 +81,13 @@ class AdminServletAction {
             log.info("Loaded {} users records", users.size());
         } catch (SQLException e) {
             log.warn("Can't load all users");
-            pageVariables.put(TemplateConstants.USER_LIST_FETCH_STATUS_TEMPLATE_VARIABLE_NAME, "<strong>Fail fetching list.</strong>");
+            pageVariables.put(TemplateConstants.USER_LIST_FETCH_STATUS_TEMPLATE_VARIABLE_NAME, "Fail fetching list.");
             return;
         }
 
         if (users.isEmpty()) {
             log.info("No any users");
-            pageVariables.put(TemplateConstants.USER_LIST_FETCH_STATUS_TEMPLATE_VARIABLE_NAME, "<strong>No any users.</strong>");
+            pageVariables.put(TemplateConstants.USER_LIST_FETCH_STATUS_TEMPLATE_VARIABLE_NAME, "No any users.");
             return;
         }
 
@@ -100,7 +99,7 @@ class AdminServletAction {
 
         String userName = Objects.toString(request.getParameter(TemplateConstants.ADDUSER_FORM_NAME_PARAMETER_NAME), "");
         if (userName.isEmpty()) {
-            pageVariables.put(TemplateConstants.USER_CREATION_STATUS_TEMPLATE_VARIABLE_NAME, "<strong>User name is required</strong>");
+            pageVariables.put(TemplateConstants.USER_CREATION_STATUS_TEMPLATE_VARIABLE_NAME, "User name is required");
             return;
         }
 
@@ -110,7 +109,7 @@ class AdminServletAction {
             if (!userAge.isEmpty()) age = Integer.parseInt(userAge);
         } catch (NumberFormatException e) {
             log.warn("Incorrect Age number format");
-            pageVariables.put(TemplateConstants.USER_CREATION_STATUS_TEMPLATE_VARIABLE_NAME, "<strong>Incorrect Age number format</strong>");
+            pageVariables.put(TemplateConstants.USER_CREATION_STATUS_TEMPLATE_VARIABLE_NAME, "Incorrect Age number format");
             return;
         }
 
@@ -124,10 +123,10 @@ class AdminServletAction {
         try {
             dbService.save(user1);
             log.info("Created new user: {}", user1);
-            pageVariables.put(TemplateConstants.USER_CREATION_STATUS_TEMPLATE_VARIABLE_NAME, "<strong>OK</strong>");
+            pageVariables.put(TemplateConstants.USER_CREATION_STATUS_TEMPLATE_VARIABLE_NAME, "OK");
         } catch (SQLException e) {
             log.error("Can't create new user");
-            pageVariables.put(TemplateConstants.USER_CREATION_STATUS_TEMPLATE_VARIABLE_NAME, "<strong>FAIL</strong>");
+            pageVariables.put(TemplateConstants.USER_CREATION_STATUS_TEMPLATE_VARIABLE_NAME, "FAIL");
         }
 
     }

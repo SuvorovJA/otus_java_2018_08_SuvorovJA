@@ -1,31 +1,30 @@
 package ru.otus.sua.L14.webserver;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.otus.sua.L14.dbservice.DBService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-@WebServlet(name = "AdminServlet")
 public class AdminServlet extends HttpServlet {
 
+    @Autowired
     private TemplateProcessor templateProcessor;
+
+    @Autowired
     private DBService dbService;
 
-        @Override
+    @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        ApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
-        templateProcessor = context.getBean("templateProcessor",TemplateProcessor.class);
-        dbService = context.getBean("dbService",DBService.class);
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
     }
 
     @Override

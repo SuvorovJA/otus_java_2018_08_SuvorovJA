@@ -3,16 +3,16 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="dbServiceNonCachedNotUsedBean" class="ru.otus.sua.L14.dbservice.DBServiceHibernateImpl"
-          destroy-method="close"/>
-
-    <bean id="cacheDataSet" class="ru.otus.sua.L14.dbservice.CacheDataSetBean"
-
-          init-method="init"/><!--scope="prototype" -->
+    <bean id="cacheDataSet" class="ru.otus.sua.L06.Cache.CacheSoftHashMap" destroy-method="dispose">
+        <constructor-arg name="maxElements" value="10" type="int"/>
+        <constructor-arg name="idleTimeMs" value="2910" type="long"/>
+        <constructor-arg name="lifeTimeMs" value="2910" type="long"/>
+        <constructor-arg name="isEternal" value="false" type="boolean"/>
+    </bean><!--scope="prototype" -->
 
     <bean id="dbService" class="ru.otus.sua.L14.dbservice.CachedDBServiceHibernateImpl"
-          destroy-method="close" init-method="init">
-        <property name="cacheDataSetBean" ref="cacheDataSet"/>
+          destroy-method="close" >
+        <property name="cacheDataSet" ref="cacheDataSet"/>
     </bean>
 
     <!--Freemarker Templates Loader Configuration-->
