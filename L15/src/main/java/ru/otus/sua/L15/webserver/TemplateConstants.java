@@ -1,6 +1,7 @@
 package ru.otus.sua.L15.webserver;
 
 class TemplateConstants {
+    static final String HTML_TEMPLATES_DIR = "WEB-INF/templates";
     //
     static final String LOGIN_FORM_LOGIN_PARAMETER_NAME = "login";
     static final String LOGIN_FORM_PASSWORD_PARAMETER_NAME = "password";

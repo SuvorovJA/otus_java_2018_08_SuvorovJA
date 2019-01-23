@@ -6,7 +6,11 @@ import freemarker.template.TemplateException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ru.otus.sua.L15.starting.Startup;
 
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -16,9 +20,11 @@ import java.util.Map;
 @Slf4j
 @Data
 @NoArgsConstructor
-class TemplateProcessor {
+@ApplicationScoped
+public class TemplateProcessor implements Startup {
 
     private Configuration configuration;
+
 
     String getPage(String page, String login, Map<String, Object> additionalPageVariables) {
         Map<String, Object> pageVariables = new HashMap<>();
@@ -47,4 +53,21 @@ class TemplateProcessor {
         }
     }
 
+    @Override
+    public void start() {
+        log.info("TEMLATE-PROCESSOR STARTED");
+    }
+
+    @PostConstruct
+    public void start(ServletContext context) {
+        log.info("TEMLATE-PROCESSOR CONFIGURED");
+        configuration = new Configuration(Configuration.VERSION_2_3_28);
+        configuration.setServletContextForTemplateLoading(context, TemplateConstants.HTML_TEMPLATES_DIR);
+        configuration.setDefaultEncoding("UTF-8");
+    }
+
+    @Override
+    public void stop() {
+
+    }
 }

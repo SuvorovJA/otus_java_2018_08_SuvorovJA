@@ -69,7 +69,7 @@ class AdminServletAction {
             log.info("Found user name: {} for id: {}", name, id);
             pageVariables.put(TemplateConstants.FOUND_USER_NAME_TEMPLATE_VARIABLE_NAME, name);
         } catch (SQLException | NullPointerException e) {
-            log.warn("Can't find user by id: {}", id);
+            log.warn("Can't find user by id: {}, caused: {}", id, e.getMessage());
             pageVariables.put(TemplateConstants.FOUND_USER_NAME_TEMPLATE_VARIABLE_NAME, "Can't find user by id: " + id + "");
         }
     }
