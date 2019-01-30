@@ -92,14 +92,14 @@
             <!-- <scope>test</scope> -->
         </dependency>
 
-        <!--CACHE-->
-        <!--<dependency>-->
-            <!--<groupId>ru.otus.sua</groupId>-->
-            <!--<artifactId>L06</artifactId>-->
-            <!--<version>2018-08</version>-->
-            <!--<scope>compile</scope>-->
-            <!--<type>jar</type>-->
-        <!--</dependency>-->
+        <!--STS-->
+        <dependency>
+            <groupId>ru.otus.sua.L16</groupId>
+            <artifactId>SocketTransferService</artifactId>
+            <version>2018-08</version>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
 
         <!--CDI-->
         <!-- https://mvnrepository.com/artifact/org.jboss.weld.servlet/weld-servlet-core -->

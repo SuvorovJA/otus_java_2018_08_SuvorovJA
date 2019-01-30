@@ -1,8 +1,6 @@
 package ru.otus.sua.L16.webserver;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.otus.sua.L16.dbservice.CurrentDbService;
-import ru.otus.sua.L16.dbservice.DBService;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -19,10 +17,6 @@ public class AdminServlet extends HttpServlet {
     @Inject
     private TemplateProcessor templateProcessor;
 
-    @Inject
-    @CurrentDbService
-    private DBService dbService;
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -31,13 +25,9 @@ public class AdminServlet extends HttpServlet {
         if (!authLogin.equals(WebserverConstants.DEFAULT_ADMIN_USER_NAME))
             response.sendRedirect(request.getContextPath() + WebserverConstants.LOGIN_SERVLET_PATH);
 
-        AdminServletAction action = new AdminServletAction(dbService, request);
-        action.action(request.getParameter(TemplateConstants.ADMIN_PAGE_ACTION));
-        action.setUserCounter();
-
         ServletHelper.setOK(response);
         response.getWriter().println(
-                templateProcessor.getPage(TemplateConstants.ADMIN_PAGE_TEMPLATE, authLogin, action.getTemplateVariables()));
+                templateProcessor.getPage(TemplateConstants.ADMIN_PAGE_TEMPLATE, authLogin, null));
     }
 
 
@@ -46,14 +36,11 @@ public class AdminServlet extends HttpServlet {
         String authLogin = ServletHelper.readLoginFromSession(request);
         log.info("Attempt get-access to admin page as: {} ", authLogin);
 
-        AdminServletAction action = new AdminServletAction(dbService, request);
-        if (authLogin.equals(WebserverConstants.DEFAULT_ADMIN_USER_NAME)) action.setUserCounter();
-
         ServletHelper.setOK(response);
         response.getWriter().println(
-                templateProcessor.getPage(TemplateConstants.ADMIN_PAGE_TEMPLATE, authLogin, action.getTemplateVariables()));
-    }
+                templateProcessor.getPage(TemplateConstants.ADMIN_PAGE_TEMPLATE, authLogin, null));
 
+    }
 }
 
 

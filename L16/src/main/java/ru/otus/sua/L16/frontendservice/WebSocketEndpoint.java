@@ -2,24 +2,20 @@ package ru.otus.sua.L16.frontendservice;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import ru.otus.sua.L16.messagesystem.Destination;
-import ru.otus.sua.L16.messagesystem.MSConsumer;
-import ru.otus.sua.L16.messagesystem.Message;
-import ru.otus.sua.L16.messagesystem.MessageSystem;
 import ru.otus.sua.L16.starting.CdiAwareConfigurator;
+import ru.otus.sua.L16.sts.SocketTransferServiceClient;
+import ru.otus.sua.L16.sts.abstractions.Msg;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Queue;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.*;
 
 @Slf4j
 @Data
@@ -31,23 +27,29 @@ public class WebSocketEndpoint implements FrontendService, MSConsumer {
     private static final String MESSAGE_SYSTEM_SENDERNAME = "FrontendService";
     private static final Queue<Session> clientsSessions = new ConcurrentLinkedQueue<>();
     private static final Map<UUID, Session> messagesJournal = new ConcurrentHashMap<>();
+    //
+    private static final int THEIR_PORT = 10001;
+    private static final String THEIR_HOST = "localhost";
+    private static final String STS_NAME = "Frontend";
+    //
     private final Queue<Session> closedSessions = new ConcurrentLinkedQueue<>();
-
-    @Inject
-    private MessageSystem messageSystem;
+    private SocketTransferServiceClient socketTransferServiceClient;
+    //
+    private ScheduledExecutorService executorService;
 
     @OnMessage
     public void onMessage(Session session, String requestedString) {
-        log.info("Used MessageSystem: \'{}\'", messageSystem);
+        log.info("Used MessageSystem: \'{}\'", socketTransferServiceClient);
         log.info("Received string \'{}\' from session id: {}. Route to message system.", requestedString, session.getId());
         Message message = new Message(
-                messageSystem.getDestination(MESSAGE_SYSTEM_QUEUENAME),
+                new Destination(MESSAGE_SYSTEM_QUEUENAME),
                 requestedString,
                 MESSAGE_SYSTEM_SENDERNAME + "/WSSID" + session.getId(),
                 UUID.randomUUID(),
                 this);
         messagesJournal.put(message.getDialogId(), session);
-        messageSystem.putMessage(message);
+        Msg msg = new MessageMsg(message);
+        socketTransferServiceClient.send(msg);
     }
 
     @OnOpen
@@ -120,10 +122,22 @@ public class WebSocketEndpoint implements FrontendService, MSConsumer {
         }
     }
 
+    @SuppressWarnings("InfiniteLoopStatement")
+    private void poller() {
+        while (true) {
+            Msg msg = socketTransferServiceClient.poll();
+            if (msg instanceof MessageMsg) {
+                MessageMsg messageMsg = (MessageMsg) msg;
+                exec(messageMsg.getMessage());
+            }
+        }
+    }
+
     @PostConstruct
-    public void start(){
-        Destination destination = messageSystem.getDestination(MESSAGE_SYSTEM_QUEUENAME);
-        messageSystem.subscribe(destination,this);
+    public void start() {
+        socketTransferServiceClient = new SocketTransferServiceClient(THEIR_PORT, THEIR_HOST, STS_NAME);
+        executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(this::poller, 1111, 111, TimeUnit.MILLISECONDS);
     }
 
     @PreDestroy
@@ -131,6 +145,7 @@ public class WebSocketEndpoint implements FrontendService, MSConsumer {
         clientsSessions.clear();
         closedSessions.clear();
         messagesJournal.clear();
+        executorService.shutdownNow();
     }
 }
 
