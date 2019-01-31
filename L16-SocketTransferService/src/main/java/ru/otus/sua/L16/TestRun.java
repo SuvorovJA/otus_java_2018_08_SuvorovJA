@@ -46,8 +46,7 @@ public class TestRun {
         pause();
         pause();
         pause();
-        pause();
-        pause();
+
 
         System.out.println("closing:");
         stsClnt.close();

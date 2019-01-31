@@ -17,12 +17,18 @@ public class CallbackHandler implements Closeable {
     private int period;
     private Consumer<Msg> callback;
     private Pollable pollableObject;
+    private boolean interrupt;
+
+    private void setInterrupt(){
+        interrupt=true;
+    }
 
     public CallbackHandler(int initDelay, int period, Consumer<Msg> consumer, Pollable pollable) {
         this.pollableObject = pollable;
         this.callback = consumer;
         this.initDelay = initDelay;
         this.period = period;
+        this.interrupt = false;
     }
 
     public void start() {
@@ -32,7 +38,7 @@ public class CallbackHandler implements Closeable {
 
     @SuppressWarnings("InfiniteLoopStatement")
     private void poller() {
-        while (true) {
+        while (!interrupt) {
             Msg msg = pollableObject.poll();
             if (msg != null) {
                 callback.accept(msg);
@@ -41,7 +47,8 @@ public class CallbackHandler implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
+        setInterrupt();
         executorService.shutdownNow();
     }
 }

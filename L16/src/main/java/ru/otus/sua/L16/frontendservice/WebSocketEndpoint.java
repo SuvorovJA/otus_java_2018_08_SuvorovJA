@@ -3,8 +3,10 @@ package ru.otus.sua.L16.frontendservice;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import ru.otus.sua.L16.starting.CdiAwareConfigurator;
+import ru.otus.sua.L16.sts.CallbackHandler;
 import ru.otus.sua.L16.sts.SocketTransferServiceClient;
 import ru.otus.sua.L16.sts.abstractions.Msg;
+import ru.otus.sua.L16.sts.entities.Message;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -15,45 +17,46 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Queue;
 import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Slf4j
 @Data
 @ServerEndpoint(value = "/ws", configurator = CdiAwareConfigurator.class)
 @Dependent
-public class WebSocketEndpoint implements FrontendService, MSConsumer {
+public class WebSocketEndpoint implements FrontendService {
 
     private static final String MESSAGE_SYSTEM_QUEUENAME = "Frontend_With_Db_Conversation";
     private static final String MESSAGE_SYSTEM_SENDERNAME = "FrontendService";
     private static final Queue<Session> clientsSessions = new ConcurrentLinkedQueue<>();
-    private static final Map<UUID, Session> messagesJournal = new ConcurrentHashMap<>();
+    private static final Map<String, Session> messagesJournal = new ConcurrentHashMap<>();
     //
     private static final int THEIR_PORT = 10001;
+    private static final int RECONNECT_DELAY = 5000;
     private static final String THEIR_HOST = "localhost";
     private static final String STS_NAME = "Frontend";
     //
     private final Queue<Session> closedSessions = new ConcurrentLinkedQueue<>();
     private SocketTransferServiceClient socketTransferServiceClient;
     //
-    private ScheduledExecutorService executorService;
+    private CallbackHandler callbackHandler;
 
     @OnMessage
     public void onMessage(Session session, String requestedString) {
         log.info("Used MessageSystem: \'{}\'", socketTransferServiceClient);
         log.info("Received string \'{}\' from session id: {}. Route to message system.", requestedString, session.getId());
         Message message = new Message(
-                new Destination(MESSAGE_SYSTEM_QUEUENAME),
+                MESSAGE_SYSTEM_QUEUENAME,
                 requestedString,
-                MESSAGE_SYSTEM_SENDERNAME + "/WSSID" + session.getId(),
-                UUID.randomUUID(),
-                this);
-        messagesJournal.put(message.getDialogId(), session);
-        Msg msg = new MessageMsg(message);
-        socketTransferServiceClient.send(msg);
+                MESSAGE_SYSTEM_SENDERNAME,
+                UUID.randomUUID().toString()
+        );
+        messagesJournal.put(message.getDialogUid(), session);
+        socketTransferServiceClient.send(message);
     }
 
     @OnOpen
-    public void open(Session session) throws IOException {
+    public void open(Session session)  {
         log.info("New WS-session opened id: {}", session.getId());
         clientsSessions.add(session);
     }
@@ -106,38 +109,31 @@ public class WebSocketEndpoint implements FrontendService, MSConsumer {
 
     }
 
-    @Override
-    public void exec(Message message) {
-        Session session = messagesJournal.get(message.getDialogId());
-        if (session == null) {
-            log.info("Reseived response message for unexistent session. Lost message.");
-        } else {
-            log.info("Reseived response message \'{}\' for session \'{}\'", message.getMessage(), session.getId());
-            try {
-                sendSingle(message.getMessage(), session);
-                messagesJournal.remove(message.getDialogId());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @SuppressWarnings("InfiniteLoopStatement")
-    private void poller() {
-        while (true) {
-            Msg msg = socketTransferServiceClient.poll();
-            if (msg instanceof MessageMsg) {
-                MessageMsg messageMsg = (MessageMsg) msg;
-                exec(messageMsg.getMessage());
+    private void exec(Msg msg) {
+        if (msg instanceof Message) {
+            Message message = (Message) msg;
+            Session session = messagesJournal.get(message.getDialogUid());
+            if (session == null) {
+                log.info("Reseived response message for unexistent session. Lost message.");
+            } else {
+                log.info("Reseived response message \'{}\' for session \'{}\'", message.getPayload(), session.getId());
+                try {
+                    sendSingle(message.getPayload(), session);
+                    messagesJournal.remove(message.getDialogUid());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     @PostConstruct
     public void start() {
-        socketTransferServiceClient = new SocketTransferServiceClient(THEIR_PORT, THEIR_HOST, STS_NAME);
-        executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(this::poller, 1111, 111, TimeUnit.MILLISECONDS);
+        socketTransferServiceClient = new SocketTransferServiceClient(THEIR_PORT, THEIR_HOST, STS_NAME, RECONNECT_DELAY);
+        callbackHandler = new CallbackHandler(
+                1000, 200,
+                this::exec,
+                socketTransferServiceClient);
     }
 
     @PreDestroy
@@ -145,7 +141,7 @@ public class WebSocketEndpoint implements FrontendService, MSConsumer {
         clientsSessions.clear();
         closedSessions.clear();
         messagesJournal.clear();
-        executorService.shutdownNow();
+        callbackHandler.close();
     }
 }
 
