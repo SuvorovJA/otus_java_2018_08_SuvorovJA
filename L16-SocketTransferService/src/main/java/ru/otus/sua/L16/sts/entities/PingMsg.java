@@ -1,4 +1,4 @@
-package ru.otus.sua.L16.sts.testingPurpose;
+package ru.otus.sua.L16.sts.entities;
 
 import lombok.Getter;
 import lombok.ToString;

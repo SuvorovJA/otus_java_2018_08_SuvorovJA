@@ -2,6 +2,7 @@ package ru.otus.sua.L16.sts;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.otus.sua.L16.sts.abstractions.Msg;
+import ru.otus.sua.L16.sts.abstractions.Pollable;
 import ru.otus.sua.L16.sts.abstractions.SocketTransferService;
 import ru.otus.sua.L16.sts.abstractions.SocketWorker;
 
@@ -12,14 +13,19 @@ import java.util.concurrent.Executors;
 
 
 @Slf4j
-public class SocketTransferServiceClient implements SocketTransferService {
+public class SocketTransferServiceClient implements SocketTransferService, Pollable {
 
-    private static final long ATTEMPT_DELAY_MS = 1000;
+    private static long ATTEMPT_DELAY_MS = 1000;
     private final int THEIRPORT;
     private final String THEIRHOST;
     private final String MYNAME;
     private SocketWorker client;
     private ExecutorService executor;
+
+    public SocketTransferServiceClient(int theirPort, String theirHost, String myName, long attemptsDelay) {
+        this(theirPort,theirHost,myName);
+        ATTEMPT_DELAY_MS = attemptsDelay;
+    }
 
     public SocketTransferServiceClient(int theirPort, String theirHost, String myName) {
         THEIRPORT = theirPort;

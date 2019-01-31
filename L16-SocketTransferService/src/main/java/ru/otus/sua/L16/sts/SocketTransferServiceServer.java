@@ -2,13 +2,14 @@ package ru.otus.sua.L16.sts;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.otus.sua.L16.sts.abstractions.Msg;
+import ru.otus.sua.L16.sts.abstractions.Pollable;
 import ru.otus.sua.L16.sts.abstractions.SocketTransferService;
 import ru.otus.sua.L16.sts.abstractions.SocketWorker;
 
 import java.io.IOException;
 
 @Slf4j
-public class SocketTransferServiceServer implements SocketTransferService {
+public class SocketTransferServiceServer implements SocketTransferService, Pollable {
     private SocketListener socketListener;
 
     public SocketTransferServiceServer(int myPort, String myName) {

@@ -1,9 +1,11 @@
 package ru.otus.sua.L16;
 
+import ru.otus.sua.L16.sts.CallbackHandler;
 import ru.otus.sua.L16.sts.SocketTransferServiceClient;
 import ru.otus.sua.L16.sts.SocketTransferServiceServer;
+import ru.otus.sua.L16.sts.abstractions.Pollable;
 import ru.otus.sua.L16.sts.abstractions.SocketTransferService;
-import ru.otus.sua.L16.sts.testingPurpose.PingMsg;
+import ru.otus.sua.L16.sts.entities.PingMsg;
 
 import java.io.IOException;
 
@@ -31,8 +33,26 @@ public class TestRun {
         System.out.println("check by server: " + stsSrv.poll());
         pause();
 
+
+        CallbackHandler callback = new CallbackHandler(
+                10,1000,
+                (m)->System.out.println("by callback: " + m),
+                (Pollable) stsSrv);
+        callback.start();
+        pause();
+        for (int i = 0; i < 5; i++) {
+            stsClnt.send(new PingMsg("Check callbacking on arrived message FromClient " + i));
+        }
+        pause();
+        pause();
+        pause();
+        pause();
+        pause();
+
+        System.out.println("closing:");
         stsClnt.close();
         stsSrv.close();
+        callback.close();
         pause();
 
         SocketTransferService stsClnt2 =
