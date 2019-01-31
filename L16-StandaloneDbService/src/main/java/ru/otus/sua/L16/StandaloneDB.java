@@ -19,8 +19,6 @@ public class StandaloneDB {
         forDbService = new MessagesystemHandlerForDbService();
         forDbService.start();
         populateDb();
-        // start socket client
-        // connect STS with DB
     }
 
     private static void populateDb() throws SQLException {
