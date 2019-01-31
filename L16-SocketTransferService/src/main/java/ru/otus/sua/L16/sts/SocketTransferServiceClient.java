@@ -2,9 +2,9 @@ package ru.otus.sua.L16.sts;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.otus.sua.L16.sts.abstractions.Msg;
-import ru.otus.sua.L16.sts.abstractions.Pollable;
 import ru.otus.sua.L16.sts.abstractions.SocketTransferService;
 import ru.otus.sua.L16.sts.abstractions.SocketWorker;
+import ru.otus.sua.L16.sts.entities.Message;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 
 
 @Slf4j
-public class SocketTransferServiceClient implements SocketTransferService, Pollable {
+public class SocketTransferServiceClient implements SocketTransferService {
 
     private static long ATTEMPT_DELAY_MS = 1000;
     private final int THEIRPORT;
@@ -23,7 +23,7 @@ public class SocketTransferServiceClient implements SocketTransferService, Polla
     private ExecutorService executor;
 
     public SocketTransferServiceClient(int theirPort, String theirHost, String myName, long attemptsDelay) {
-        this(theirPort,theirHost,myName);
+        this(theirPort, theirHost, myName);
         ATTEMPT_DELAY_MS = attemptsDelay;
     }
 
@@ -42,9 +42,9 @@ public class SocketTransferServiceClient implements SocketTransferService, Polla
     }
 
     @Override
-    public Msg poll() {
+    public <T extends Msg> T poll() {
         if (client == null) return null;
-        return client.poll();
+        return (T) client.poll();
     }
 
     @Override

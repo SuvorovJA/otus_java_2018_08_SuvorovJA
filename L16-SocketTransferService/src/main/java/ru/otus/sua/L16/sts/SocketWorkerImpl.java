@@ -60,7 +60,7 @@ public class SocketWorkerImpl implements SocketWorker {
         try {
             socket.close();
         } catch (IOException e) {
-            log.error("err on close socket: \'{}\'",e.getMessage());
+            log.error("err on close socket: \'{}\'", e.getMessage());
         }
         log.info("Socket worker was shutdown.");
     }
@@ -71,6 +71,7 @@ public class SocketWorkerImpl implements SocketWorker {
             while (socket.isConnected()) {
                 Msg msg = output.take(); //blocks
                 String json = new Gson().toJson(msg);
+                log.info("Send to socket \'{}\': \'{}\'", socket, json);
                 out.println(json);
                 out.println();//line with json + an empty line
             }
@@ -88,6 +89,7 @@ public class SocketWorkerImpl implements SocketWorker {
                 stringBuilder.append(inputLine);
                 if (inputLine.isEmpty()) { //empty line is the end of the message
                     String json = stringBuilder.toString();
+                    log.info("Receive from socket \'{}\': \'{}\'", socket, json);
                     Msg msg = getMsgFromJSON(json);
                     input.add(msg);
                     stringBuilder = new StringBuilder();

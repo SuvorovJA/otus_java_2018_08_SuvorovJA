@@ -9,7 +9,7 @@ import ru.otus.sua.L16.sts.abstractions.SocketWorker;
 import java.io.IOException;
 
 @Slf4j
-public class SocketTransferServiceServer implements SocketTransferService, Pollable {
+public class SocketTransferServiceServer implements SocketTransferService {
     private SocketListener socketListener;
 
     public SocketTransferServiceServer(int myPort, String myName) {
@@ -26,10 +26,10 @@ public class SocketTransferServiceServer implements SocketTransferService, Polla
     }
 
     @Override
-    public Msg poll() {
+    public <T extends Msg> T poll() {
         for (SocketWorker worker : socketListener.getWorkers()) {
             Msg msg = worker.poll();
-            if (msg != null) return msg;
+            if (msg != null) return (T) msg;
         }
         return null;
     }

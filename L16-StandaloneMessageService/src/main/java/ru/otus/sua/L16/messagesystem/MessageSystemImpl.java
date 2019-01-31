@@ -1,23 +1,22 @@
 package ru.otus.sua.L16.messagesystem;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.otus.sua.L16.starting.Startup;
+import ru.otus.sua.L16.sts.entities.Message;
 
-import javax.enterprise.context.ApplicationScoped;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.Consumer;
 
 
 @Slf4j
-@ApplicationScoped
-public class MessageSystemImpl implements MessageSystem, Startup {
+public class MessageSystemImpl implements MessageSystem {
 
     private final Map<String, Destination> destinationsByName = new ConcurrentHashMap<>();
     private final Map<Destination, Thread> workers = new ConcurrentHashMap<>();
-    private final Map<Destination, MSConsumer> consumers = new ConcurrentHashMap<>();
-    private final Map<Destination, MSSupplier> suppliers = new ConcurrentHashMap<>();
+    private final Map<Destination, Consumer<Message>> consumers = new ConcurrentHashMap<>();
+    private final Map<Destination, Consumer<Message>> suppliers = new ConcurrentHashMap<>();
     private final Map<Destination, BlockingQueue<Message>> destinationQueues = new ConcurrentHashMap<>();
 
     @Override
@@ -34,7 +33,7 @@ public class MessageSystemImpl implements MessageSystem, Startup {
     private Destination addDestination(Destination destination) {
         if (!destinationQueues.containsKey(destination)) {
             destinationQueues.put(destination, new LinkedBlockingQueue<>());
-            log.info("Map of queues length: \'{}\'", destinationQueues.size());
+            log.info("Register new destination: \'{}\'. Map of queues length: \'{}\'", destination.getName(), destinationQueues.size());
             startInThread(destination);
         }
         return destination;
@@ -55,42 +54,41 @@ public class MessageSystemImpl implements MessageSystem, Startup {
     @Override
     public void putMessage(Message message) {
         log.info("Attempt to put message to Destination: \'{}\'", message.getDestination());
-        Destination destination = addDestination(message.getDestination());
+        Destination destination = getDestination(message.getDestination());
         if (!destinationQueues.get(destination).offer(message))
             log.info("Occured lost of message in \'{}\', message: \'{}\', from \'{}\'",
                     destination.getName(),
-                    message.getMessage(),
-                    message.getSenderName());
+                    message.getPayload(),
+                    message.getSender());
     }
 
     @Override
-    public void subscribe(Destination destination, MSConsumer consumer) {
-        log.info("Subscide consumer \'{}\' for destination \'{}\'", consumer.getClass(), destination.getName());
-        consumers.put(destination, consumer);
+    public void subscribeAsConsumer(Destination destination, Consumer<Message> jerk) {
+        log.info("Subscribe consumer \'{}\' for destination \'{}\'", jerk.getClass(), destination.getName());
+        consumers.put(destination, jerk);
     }
 
     @Override
-    public void subscribe(Destination destination, MSSupplier supplier) {
-        log.info("Subscide supplier \'{}\' for destination \'{}\'", supplier.getClass(), destination.getName());
-        suppliers.put(destination, supplier);
+    public void subscribeAsSupplier(Destination destination, Consumer<Message> jerk) {
+        log.info("Subscribe supplier \'{}\' for destination \'{}\'", jerk.getClass(), destination.getName());
+        suppliers.put(destination, jerk);
     }
 
     @SuppressWarnings("InfiniteLoopStatement")
     private void startInThread(Destination destination) {
         Thread thread = new Thread(() -> {
-            log.info("Worker \'{}\' started", Thread.currentThread().getName());
+            log.info("New Worker \'{}\' started", Thread.currentThread().getName());
             BlockingQueue<Message> queue = destinationQueues.get(destination);
             try {
                 while (true) {
                     Message message = queue.take();
-                    log.info("Traffic occured from \'{}\': \'{}\'", message.getSenderName(), message.getMessage());
-                    if (message.getSender() instanceof MSSupplier) {
-                        log.info("Route message for dialog: \'{}\' to consumer.", message.getDialogId());
-                        consumers.get(destination).exec(message);
-                    }
-                    if (message.getSender() instanceof MSConsumer) {
-                        log.info("Route message for dialog: \'{}\' to supplier.", message.getDialogId());
-                        suppliers.get(destination).exec(message);
+                    log.info("Traffic occured from \'{}\': \'{}\'", message.getSender(), message.getPayload());
+                    if (message.isSupplier()) {
+                        log.info("Route message for dialog: \'{}\' to consumer.", message.getDialogUid());
+                        consumers.get(destination).accept(message);
+                    } else {
+                        log.info("Route message for dialog: \'{}\' to supplier.", message.getDialogUid());
+                        suppliers.get(destination).accept(message);
                     }
                 }
             } catch (InterruptedException e) {
@@ -103,7 +101,7 @@ public class MessageSystemImpl implements MessageSystem, Startup {
     }
 
     @Override
-    public void stop() {
+    public void close() {
         destinationsByName.clear();
         for (BlockingQueue q : destinationQueues.values()) {
             q.clear();

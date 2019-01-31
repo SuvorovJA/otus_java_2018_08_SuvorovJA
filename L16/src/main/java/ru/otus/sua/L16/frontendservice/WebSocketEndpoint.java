@@ -35,6 +35,7 @@ public class WebSocketEndpoint implements FrontendService {
     private static final int RECONNECT_DELAY = 5000;
     private static final String THEIR_HOST = "localhost";
     private static final String STS_NAME = "Frontend";
+    private static final boolean isSupplier = false;
     //
     private final Queue<Session> closedSessions = new ConcurrentLinkedQueue<>();
     private SocketTransferServiceClient socketTransferServiceClient;
@@ -49,14 +50,15 @@ public class WebSocketEndpoint implements FrontendService {
                 MESSAGE_SYSTEM_QUEUENAME,
                 requestedString,
                 MESSAGE_SYSTEM_SENDERNAME,
-                UUID.randomUUID().toString()
+                UUID.randomUUID().toString(),
+                isSupplier
         );
         messagesJournal.put(message.getDialogUid(), session);
         socketTransferServiceClient.send(message);
     }
 
     @OnOpen
-    public void open(Session session)  {
+    public void open(Session session) {
         log.info("New WS-session opened id: {}", session.getId());
         clientsSessions.add(session);
     }
@@ -131,9 +133,10 @@ public class WebSocketEndpoint implements FrontendService {
     public void start() {
         socketTransferServiceClient = new SocketTransferServiceClient(THEIR_PORT, THEIR_HOST, STS_NAME, RECONNECT_DELAY);
         callbackHandler = new CallbackHandler(
-                1000, 200,
+                1000, 500,
                 this::exec,
                 socketTransferServiceClient);
+        callbackHandler.start();
     }
 
     @PreDestroy

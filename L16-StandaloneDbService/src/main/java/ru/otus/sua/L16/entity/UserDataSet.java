@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.apache.commons.collections4.CollectionUtils;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,7 +48,6 @@ public class UserDataSet extends DataSet {
             this.getAddress().setUser(this);
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -64,4 +64,5 @@ public class UserDataSet extends DataSet {
     public int hashCode() {
         return Objects.hash(super.hashCode(), getName(), getAge(), getPhones(), getAddress());
     }
+
 }
