@@ -25,11 +25,10 @@ Cревер из ДЗ-15 разделить на три приложения:
 
 сборка
 ```
-mvn package
-    cd L16
-    mvn package
     cd ../L16-SocketTransferService/
     mvn install
+    cd L16
+    mvn package
     cd ../L16-StandaloneDbService/
     mvn package
     cd ../L16-StandaloneMessageService/
